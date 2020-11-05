@@ -1,0 +1,51 @@
+#login-screen {
+  @include full-space;
+  background-color: #585858;
+  background-image: linear-gradient(20deg, #5858585c 0%, #6060605c 26%, #6464645c 100%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .login-form {
+    position: relative;
+    width: 750px;
+    height: 330px;
+    margin-top: 0;
+    background: #ffffff;
+
+    .offline-section {
+      box-shadow: none;
+    }
+
+    .divider {
+      height: calc(50% - (2rem / 2));
+    }
+  }
+
+  #developer-signature {
+    position: absolute;
+    font-size: 12px;
+    bottom: 4px;
+    right: 8px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  #login-screen {
+    .login-form {
+      .firebase-login-form {
+        padding-bottom: 2.5em;
+      }
+      .offline-section {
+        box-shadow: -1px 0 0 0 rgba(34,36,38,.15);
+      }
+      .offline-btn {
+        margin-top: 1em;
+      }
+      .horizontal-devider {
+        display: none;
+      }
+    }
+  }
+}

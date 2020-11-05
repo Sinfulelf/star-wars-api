@@ -1,0 +1,24 @@
+@font-face {
+  font-family: Muli;
+  src: url("../font/Muli.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body,
+#root {
+  @include full-space;
+  position: relative;
+  min-width: $page-min-width;
+  overflow-y: hidden;
+}
+
+#root {
+  font-family: Muli, "Segoe UI", BlinkMacSystemFont;
+  line-height: 1.2em;
+
+  .ui {
+    font-family: Muli, "Segoe UI", BlinkMacSystemFont;
+  }
+}

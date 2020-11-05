@@ -1,0 +1,8 @@
+- UI
+1) node-sass;
+2) semantic-ui-react semantic-ui-css
+- BL
+3) redux react-redux;
+4) redux-thunk;
+5) react-router react-router-dom;
+6) 
