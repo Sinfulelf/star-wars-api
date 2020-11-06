@@ -74,7 +74,7 @@ const AuthPage = ({ history, data, actions }) => {
             </Grid.Column>
             <Grid.Column verticalAlign="middle" className="offline-section">
               <Popup
-                content="All your changes will be storage in your browser."
+                content="All your changes will be stored in your browser."
                 trigger={
                   <Button
                     basic
@@ -89,7 +89,7 @@ const AuthPage = ({ history, data, actions }) => {
                       <Icon name="wifi" />
                       <Icon corner name="x" />
                     </Icon.Group>
-                    &nbsp; Work offline
+                    &nbsp; Enter offline
                   </Button>
                 }
               />

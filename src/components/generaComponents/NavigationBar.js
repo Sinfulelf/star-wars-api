@@ -9,15 +9,11 @@ import { Button, Icon, Transition } from "semantic-ui-react";
 
 import { ParagraphMock } from "../helpersComponents/Mocks";
 
-let animationPlayed = false;
 const NavigationBar = ({ className, data, actions }) => {
   /**Play lil animation only single time */
-  const [showHelloLabel, setShowHelloLabel] = useState(animationPlayed);
+  const [showHelloLabel, setShowHelloLabel] = useState(false);
   useEffect(() => {
-    animationPlayed = true;
-    setTimeout(() => {
       setShowHelloLabel(true);
-    }, 200);
   }, []);
 
   const userName = data.userInfo.userName;
@@ -27,7 +23,7 @@ const NavigationBar = ({ className, data, actions }) => {
         <Transition
           visible={showHelloLabel}
           animation="slide up"
-          duration={700}
+          duration={800}
         >
           <h3 style={{ marginBottom: ".2em" }}>
             May the force be with you,
@@ -40,12 +36,12 @@ const NavigationBar = ({ className, data, actions }) => {
         </Transition>
       </div>
       <div>
-        <Button animated="vertical">
+        {/* <Button animated="vertical">
           <Button.Content visible>Setting</Button.Content>
           <Button.Content hidden>
             <Icon name="settings" size="large" />
           </Button.Content>
-        </Button>
+        </Button> */}
         <Button
           animated="vertical"
           as={Link}

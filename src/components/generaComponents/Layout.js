@@ -44,11 +44,12 @@ const mapDispatchToProps = (dispatch) => {
     actions: {
       getUserInfoDataFromStorages: () => {
         const userInfo = getUserInfoFromCookie();
-        console.log(userInfo);
         dispatch(setUserInfoAction(userInfo.userName, userInfo.offlineMode));
       },
     },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+const LayoutComponent = connect(mapStateToProps, mapDispatchToProps)(Layout);
+
+export default LayoutComponent;

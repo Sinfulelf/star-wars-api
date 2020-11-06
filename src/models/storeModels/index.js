@@ -1,3 +1,3 @@
 export * from "./peopleStoreModel";
-export * from "./settingStoreModel";
+export * from "./pageInfoStoreModel";
 export * from "./userInfoStoreModel";
