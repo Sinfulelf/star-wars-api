@@ -10,6 +10,7 @@ import {
   Header,
   Icon,
   Message,
+  Popup,
 } from "semantic-ui-react";
 
 import { DeathStarIcon } from "../helpersComponents/Icons";
@@ -18,17 +19,15 @@ import { RouteData } from "../../data";
 
 import { setUserCookies } from "../../helpers";
 
-import { setUserName as setUserNameAction } from "../../actions/userInfoActions";
+import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions";
 
 const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
-    setUserCookies("", 1);
+    setUserCookies({}, 1);
   }, []);
 
-  const {
-    authOffline
-  } = actions;
+  const { authOffline } = actions;
 
   return (
     <div id="login-screen">
@@ -74,21 +73,26 @@ const AuthPage = ({ history, data, actions }) => {
               </Form>
             </Grid.Column>
             <Grid.Column verticalAlign="middle" className="offline-section">
-              <Button
-                basic
-                color="purple"
-                size="big"
-                className="offline-btn"
-                onClick={authOffline}
-                as={Link}
-                to={RouteData.Base}
-              >
-                <Icon.Group>
-                  <Icon name="wifi" />
-                  <Icon corner name="x" />
-                </Icon.Group>
-                &nbsp; Work offline
-              </Button>
+              <Popup
+                content="All your changes will be storage in your browser."
+                trigger={
+                  <Button
+                    basic
+                    color="purple"
+                    size="big"
+                    className="offline-btn"
+                    onClick={authOffline}
+                    as={Link}
+                    to={RouteData.Base}
+                  >
+                    <Icon.Group>
+                      <Icon name="wifi" />
+                      <Icon corner name="x" />
+                    </Icon.Group>
+                    &nbsp; Work offline
+                  </Button>
+                }
+              />
             </Grid.Column>
           </Grid>
           <Divider className="horizontal-devider" vertical>
@@ -97,9 +101,9 @@ const AuthPage = ({ history, data, actions }) => {
         </Segment>
       </Segment>
       <div id="developer-signature">
-        developed by{" "}
+        developed by
         <a target="_blank" rel="noreferrer" href="https://github.com/Sinfulelf">
-          Anton Nastolnyi
+          &nbsp;Anton Nastolnyi
         </a>
       </div>
     </div>
@@ -117,9 +121,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
       authOffline: () => {
-        const userName = "anonymous";
-        setUserCookies(userName);
-        dispatch(setUserNameAction(userName));
+        const userName = "Anonymous";
+        setUserCookies(JSON.stringify({ userName, offlineMode: true }));
+        dispatch(setUserInfoAction(userName, true));
       },
     },
   };

@@ -1,10 +1,24 @@
-import React, { PureComponent, Fragment } from "react";
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+
+import { getUserInfoFromCookie } from "../../helpers";
+
+import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions";
 
 import { Divider } from "semantic-ui-react";
 
 import NavigationBar from "./NavigationBar";
 
-export default class LayoutComponent extends PureComponent {
+export class Layout extends PureComponent {
+  componentDidMount() {
+    const { data, actions } = this.props;
+    if (!data.userInfo.userName) {
+      setTimeout(() => {
+        actions.getUserInfoDataFromStorages();
+      }, 1);
+    }
+  }
+
   render() {
     return (
       <div className="layout-container">
@@ -15,3 +29,26 @@ export default class LayoutComponent extends PureComponent {
     );
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const { userInfo } = state;
+  return {
+    data: {
+      userInfo,
+    },
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: {
+      getUserInfoDataFromStorages: () => {
+        const userInfo = getUserInfoFromCookie();
+        console.log(userInfo);
+        dispatch(setUserInfoAction(userInfo.userName, userInfo.offlineMode));
+      },
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

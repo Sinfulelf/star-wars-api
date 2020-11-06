@@ -15,6 +15,7 @@ body,
 
 #root {
   min-width: $page-min-width;
+  @extend .ui.black;
 
   font-family: Muli, "Segoe UI", BlinkMacSystemFont;
   line-height: 1.2em;
@@ -29,9 +30,14 @@ body,
   display: flex;
   flex-direction: column;
   &__navigation-bar {
-    flex: 0 0 60px;
-    background: #5c5c5c;
+    flex: 0 0 65px;
+    background: #3f3f3f;
     color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .7em 1.7em;
   }
   &__content {
     flex: 1;

@@ -19,3 +19,51 @@
   opacity: 0.45;
 }
 
+.paragraph-mock {
+  background: #bcbec0;
+  display: inline-block;
+  vertical-align: bottom;
+  margin-bottom: 2px;
+}
+
+.ui {
+  &.red {
+    color: #db2828;
+  }
+  &.orange {
+    color: #f2711c;
+  }
+  &.yellow {
+    color: #fbbd08;
+  }
+  &.olive {
+    color: #b5cc18;
+  }
+  &.green {
+    color: #21ba45;
+  }
+  &.teal {
+    color: #00b5ad;
+  }
+  &.blue {
+    color: #2185d0;
+  }
+  &.violet {
+    color: #6435c9;
+  }
+  &.purple {
+    color: #a333c8;
+  }
+  &.pink {
+    color: #e03997;
+  }
+  &.brown {
+    color: #a5673f;
+  }
+  &.grey {
+    color: #767676;
+  }
+  &.black {
+    color: #1b1c1d;
+  }
+}

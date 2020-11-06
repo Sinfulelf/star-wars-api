@@ -1,16 +1,14 @@
-
-
 export const UserInfoActions = {
-  SET_USER_NAME: "SET_USER_NAME"
+  SET_USER_INFO: "SET_USER_INFO",
 };
 
-const setUserNameDispatch = (userName) => ({
-  type: UserInfoActions.SET_USER_NAME,
-  payload: { userName },
+const setUserInfoDispatch = (userName, offlineMode) => ({
+  type: UserInfoActions.SET_USER_INFO,
+  payload: { userName, offlineMode },
 });
 
-export function setUserName(userName) {
+export function setUserInfo(userName, offlineMode) {
   return (dispatch) => {
-    dispatch(setUserNameDispatch(userName));
-  }
+    dispatch(setUserInfoDispatch(userName, offlineMode));
+  };
 }

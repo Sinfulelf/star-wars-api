@@ -1,5 +1,10 @@
 body {
   .ui.button {
     padding: 0.78571429em 1.5em 1em 1.5em;
+
+    &.animated .hidden.content {
+      margin-top: -.75em;
+    }
   }
+  
 }
