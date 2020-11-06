@@ -4,5 +4,6 @@
 - BL
 3) redux react-redux;
 4) redux-thunk;
-5) react-router react-router-dom;
-6) 
+5) redux-actions;
+6) react-router react-router-dom;
+7) 

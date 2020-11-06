@@ -1,3 +1,6 @@
+
+$login-form-width: 750px;
+
 #login-screen {
   @include full-space;
   background-color: #585858;
@@ -9,7 +12,7 @@
 
   .login-form {
     position: relative;
-    width: 750px;
+    width: $login-form-width;
     height: 330px;
     margin-top: 0;
     background: #ffffff;
@@ -26,6 +29,7 @@
   #developer-signature {
     position: absolute;
     font-size: 12px;
+    color: #ffffff;
     bottom: 4px;
     right: 8px;
   }
@@ -34,6 +38,8 @@
 @media only screen and (max-width: 767px) {
   #login-screen {
     .login-form {
+      width: .65 * $login-form-width;
+      height: 450px;
       .firebase-login-form {
         padding-bottom: 2.5em;
       }

@@ -9,6 +9,7 @@ import {
   Segment,
   Header,
   Icon,
+  Message,
 } from "semantic-ui-react";
 
 import { DeathStarIcon } from "../helpersComponents/Icons";
@@ -17,27 +18,32 @@ import { RouteData } from "../../data";
 
 import { setUserCookies } from "../../helpers";
 
+import { setUserName as setUserNameAction } from "../../actions/userInfoActions";
+
 const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
     setUserCookies("", 1);
-
   }, []);
+
+  const {
+    authOffline
+  } = actions;
 
   return (
     <div id="login-screen">
       <Segment>
         <Header as="h2" icon className="login-header full-width">
-          <DeathStarIcon width={40} height={40} />
+          <DeathStarIcon width={45} height={45} />
           <div>Star Wars API</div>
           <Header.Subheader>
-            Test task to check on my react skill.
+            Test task to check react skill of mine.
           </Header.Subheader>
         </Header>
         <Segment className="login-form" placeholder>
           <Grid columns={2} relaxed="very" stackable divided>
             <Grid.Column>
-              <Form className="firebase-login-form" widths='equal'>
+              <Form className="firebase-login-form" widths="equal">
                 <Form.Input
                   icon="user"
                   iconPosition="left"
@@ -56,20 +62,24 @@ const AuthPage = ({ history, data, actions }) => {
                 <Button
                   content="Login via firebase"
                   primary
-                  style={{ marginTop: "2.5em" }}
+                  style={{ marginTop: "1.5em", marginBottom: "2.5em" }}
                   disabled
                 />
+                <Message className="disabled">
+                  First time here?&nbsp;
+                  <Link to="#" style={{ maginLeft: ".3em" }}>
+                    Sing Up now!
+                  </Link>
+                </Message>
               </Form>
             </Grid.Column>
             <Grid.Column verticalAlign="middle" className="offline-section">
               <Button
                 basic
-                color="teal"
+                color="purple"
                 size="big"
                 className="offline-btn"
-                onClick={(e) => {
-                  setUserCookies("guest");
-                }}
+                onClick={authOffline}
                 as={Link}
                 to={RouteData.Base}
               >
@@ -105,7 +115,13 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions: {},
+    actions: {
+      authOffline: () => {
+        const userName = "anonymous";
+        setUserCookies(userName);
+        dispatch(setUserNameAction(userName));
+      },
+    },
   };
 };
 

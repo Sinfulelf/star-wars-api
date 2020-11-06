@@ -6,9 +6,9 @@
 
 /**
  * Get json data via fetch;
- * @param {Object} urlData `{ baseUrl, controller, method, param, query }`
- * @param {RequestInit} postBody request body 
- * 
+ * @param {Object} urlData `{ baseUrl, param, query }`
+ * @param {RequestInit} postBody request body
+ *
  * @memberof Helpers.httpHelpers
  */
 export async function getData(urlData, postBody) {
@@ -29,13 +29,13 @@ export async function getData(urlData, postBody) {
 }
 
 function getUrl(urlData) {
-  const { baseUrl, controller, method, param, query } = urlData;
-  let url = `${baseUrl}${controller}/${method}`;
+  const { baseUrl, param, query } = urlData;
+  let url = baseUrl;
   if (param) {
     url += `/${param}`;
   }
   if (query) {
-    url += query;
+    url += "?" + new URLSearchParams(query).toString();
   }
   return url;
 }

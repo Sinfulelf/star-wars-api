@@ -1,0 +1,21 @@
+.full-width {
+  @include full-width;
+}
+
+.full-space {
+  @include full-space;
+}
+
+.d-flex {
+  @include dispay-flex;
+}
+
+.p-absolute {
+  @include position-absolute;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.45;
+}
+

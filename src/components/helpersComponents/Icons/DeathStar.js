@@ -4,7 +4,7 @@ import IconPattern from "./IconPattern";
 
 export const DeathStarIcon = ({ height = 25, width = 25, ...props }) => {
   return (
-    <IconPattern height={height} width={width} {...props} viewBox="0 0 500 500">
+    <IconPattern height={height} width={width} {...props} viewBox="0 0 540 500">
       <g xmlns="http://www.w3.org/2000/svg" id="svg_3">
         <circle r="32" cy="138.667" cx="224" />
         <path

@@ -11,6 +11,8 @@ import { RouteData } from "./data";
 
 import { checkCookiesOnExists } from "./helpers";
 
+import Layout from "./components/generaComponents/Layout";
+
 import AuthPage from "./components/AuthorizePage";
 import PeopleListPage from "./components/PeopleListPage";
 
@@ -20,15 +22,19 @@ export default class App extends PureComponent {
       <Provider store={store}>
         <Switch>
           <Route exact path={RouteData.Login} component={AuthPage} />
-          <InnerRoute
-            component={
-              <Route
-                exact
-                path={[RouteData.Base, RouteData.People]}
-                component={PeopleListPage}
+          <Layout>
+            <Switch>
+              <InnerRoute
+                component={
+                  <Route
+                    exact
+                    path={[RouteData.Base, RouteData.People]}
+                    component={PeopleListPage}
+                  />
+                }
               />
-            }
-          />
+            </Switch>
+          </Layout>
         </Switch>
       </Provider>
     );

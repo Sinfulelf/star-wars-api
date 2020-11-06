@@ -10,15 +10,33 @@ body,
 #root {
   @include full-space;
   position: relative;
-  min-width: $page-min-width;
   overflow-y: hidden;
 }
 
 #root {
+  min-width: $page-min-width;
+
   font-family: Muli, "Segoe UI", BlinkMacSystemFont;
   line-height: 1.2em;
 
   .ui {
     font-family: Muli, "Segoe UI", BlinkMacSystemFont;
+  }
+}
+
+.layout-container {
+  @include full-space;
+  display: flex;
+  flex-direction: column;
+  &__navigation-bar {
+    flex: 0 0 60px;
+    background: #5c5c5c;
+    color: #fff;
+  }
+  &__content {
+    flex: 1;
+    position: relative;
+    background-color: #dee2e6;
+    overflow-y: auto;
   }
 }
