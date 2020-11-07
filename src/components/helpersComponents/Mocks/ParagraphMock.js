@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export const ParagraphMock = ({ width, height = 14 }) => (
   <div
-    className="paragraph-mock"
+    className="paragraph-mock ui placeholder"
     style={{
       width,
       height,

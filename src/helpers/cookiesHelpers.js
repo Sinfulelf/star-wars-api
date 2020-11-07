@@ -29,18 +29,26 @@ const userInfoKey = "userInfo";
  * @memberof Helpers.cookiesHelpers
  */
 export function setUserCookies(userInfo, time = 600_000) {
-  document.cookie = `${userInfoKey}=${userInfo}; expires=${new Date(
-    Date.now() + time
-  ).toUTCString()}`;
+
+  document.cookie = `${userInfoKey}=${userInfo}; expires=${setTimeForCookies(time)}`;
   if (updateCookiesInterval) {
     clearInterval(updateCookiesInterval);
   }
 
-  updateCookiesInterval = setInterval(() => {
-    document.cookie = `${document.cookie}; expires=${new Date(
-      Date.now() + time
-    ).toUTCString()}`;
-  }, time - 1);
+  if (time) {
+    updateCookiesInterval = setInterval(() => {
+      document.cookie = `${document.cookie}; expires=${setTimeForCookies(time)}`;
+    }, time * 0.8);
+  }
+}
+
+function setTimeForCookies (seconds) {
+	var now = new Date();
+	var time = now.getTime();
+ 
+	time += seconds * 1000;
+	now.setTime(time);
+	return now;
 }
 
 /**

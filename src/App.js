@@ -14,7 +14,7 @@ import { checkCookiesOnExists } from "./helpers";
 import Layout from "./components/generaComponents/Layout";
 
 import AuthPage from "./components/AuthorizePage";
-import PeopleListPage from "./components/PeopleListPage";
+import PeopleListPage from "./components/PeoplePage";
 
 export default class App extends PureComponent {
   render() {

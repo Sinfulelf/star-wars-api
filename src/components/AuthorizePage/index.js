@@ -24,7 +24,7 @@ import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions"
 const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
-    setUserCookies({}, 1);
+    setUserCookies({}, 0);
   }, []);
 
   const { authOffline } = actions;
@@ -87,7 +87,7 @@ const AuthPage = ({ history, data, actions }) => {
                   >
                     <Icon.Group>
                       <Icon name="wifi" />
-                      <Icon corner name="x" />
+                      <Icon corner name="x" color="red"/>
                     </Icon.Group>
                     &nbsp; Enter offline
                   </Button>

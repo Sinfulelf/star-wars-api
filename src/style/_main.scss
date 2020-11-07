@@ -37,12 +37,39 @@ body,
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .7em 1.7em;
+    padding: 0.7em 1.7em;
   }
   &__content {
     flex: 1;
     position: relative;
-    background-color: #dee2e6;
+    background-color: #dcddde;
     overflow-y: auto;
+
+    .page-wrapper {
+      @include full-space;
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+
+      & > div {
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+
+      .page {
+        &-header {
+          flex: 0 0 60px;
+          padding: 10px .5em 10px 3.5em;
+        }
+        &-content {
+          flex: 1;
+        }
+        &-footer {
+          flex: 0 0 70px;
+          padding: 5px .5em 15px 3.5em;
+        }
+      }
+    }
   }
 }

@@ -13,7 +13,7 @@ const NavigationBar = ({ className, data, actions }) => {
   /**Play lil animation only single time */
   const [showHelloLabel, setShowHelloLabel] = useState(false);
   useEffect(() => {
-      setShowHelloLabel(true);
+    setShowHelloLabel(true);
   }, []);
 
   const userName = data.userInfo.userName;

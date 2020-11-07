@@ -28,7 +28,7 @@ export function getPeopleData(page) {
   return async (dispatch, getState) => {
     const pageStr = (page || 1).toString();
     const { peopleData } = getState();
-    if (peopleData.uploadedPages.indexOf(pageStr) === -1) {
+    if (pageStr !== peopleData.currentPage) {
       try {
         dispatch(setPeoplePageLoadingState(true));
 

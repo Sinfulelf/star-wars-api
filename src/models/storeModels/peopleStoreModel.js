@@ -7,7 +7,9 @@ export class PeopleStore {
   people = [];
   totalPeopleCount = 0;
   person = null;
-  uploadedPages = [];
+  currentPage = "1";
+
+  itemsPerRequest = 10;
 }
 
 export const PeopleStorePropTypes = {
@@ -16,5 +18,5 @@ export const PeopleStorePropTypes = {
   people: PT.arrayOf(PT.instanceOf(HeroDetails)),
   totalPeopleCount: PT.number,
   person: PT.oneOfType([PT.instanceOf(null), PT.instanceOf(HeroDetails)]),
-  uploadedPages: PT.arrayOf(PT.number),
+  currentPage: PT.number,
 };
