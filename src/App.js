@@ -13,6 +13,8 @@ import { checkCookiesOnExists } from "./helpers";
 
 import Layout from "./components/generaComponents/Layout";
 
+import PageAreNotExist from "./components/InfoPages/PageAreNotExists";
+
 import AuthPage from "./components/AuthorizePage";
 import PeopleListPage from "./components/PeoplePage";
 
@@ -25,14 +27,11 @@ export default class App extends PureComponent {
           <Layout>
             <Switch>
               <InnerRoute
-                component={
-                  <Route
-                    exact
-                    path={[RouteData.Base, RouteData.People]}
-                    component={PeopleListPage}
-                  />
-                }
+                exact
+                path={[RouteData.Base, RouteData.People, RouteData.Favorites]}
+                component={PeopleListPage}
               />
+              <InnerRoute component={PageAreNotExist} />
             </Switch>
           </Layout>
         </Switch>
@@ -41,9 +40,10 @@ export default class App extends PureComponent {
   }
 }
 
-const InnerRoute = ({ component }) =>
-  checkCookiesOnExists() ? (
-    component
+const InnerRoute = ({ exact, path, component }) => {
+  return checkCookiesOnExists() ? (
+    <Route exact={exact} path={path} component={component} />
   ) : (
     <Redirect to={{ pathname: RouteData.Login }} />
   );
+};

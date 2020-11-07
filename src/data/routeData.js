@@ -5,4 +5,6 @@ export const RouteData = {
   Hero: "/hero/:id",
   Favorites: "/favorites",
   Settings: "/settings",
+
+  NotExists: '/404'
 };

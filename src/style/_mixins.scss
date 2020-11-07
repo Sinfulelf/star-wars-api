@@ -16,5 +16,5 @@
 }
 
 @mixin position-absolute {
-  position: absolute;
+  position: absolute !important;
 }

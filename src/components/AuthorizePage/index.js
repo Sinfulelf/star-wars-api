@@ -87,7 +87,7 @@ const AuthPage = ({ history, data, actions }) => {
                   >
                     <Icon.Group>
                       <Icon name="wifi" />
-                      <Icon corner name="x" color="red"/>
+                      <Icon corner name="x" color="red" />
                     </Icon.Group>
                     &nbsp; Enter offline
                   </Button>
@@ -95,7 +95,7 @@ const AuthPage = ({ history, data, actions }) => {
               />
             </Grid.Column>
           </Grid>
-          <Divider className="horizontal-devider" vertical>
+          <Divider className="vertical-devider" vertical>
             Or
           </Divider>
         </Segment>
@@ -129,9 +129,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const AuthPageComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AuthPage);
+const AuthPageComponent = connect(mapStateToProps, mapDispatchToProps, null, {
+  pure: true,
+  areOwnPropsEqual: () => true,
+})(AuthPage);
 
 export default withRouter((props) => <AuthPageComponent {...props} />);

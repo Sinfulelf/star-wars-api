@@ -1,5 +1,5 @@
 import PT from "prop-types";
-import { HeroDetails } from "../dataModels";
+import { HeroDetails, PeoplePageDispaType } from "../dataModels";
 
 export class PeopleStore {
   timeStamp = 0;
@@ -10,6 +10,8 @@ export class PeopleStore {
   currentPage = "1";
 
   itemsPerRequest = 10;
+
+  dispayType = PeoplePageDispaType.list;
 }
 
 export const PeopleStorePropTypes = {

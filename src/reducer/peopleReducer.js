@@ -4,6 +4,7 @@ import { PeopleActions } from "../actions";
 
 const {
   SET_PEOPLE_PAGE_LOADING_STATE,
+  SET_PEOPLE_PAGE_DISPAY_TYPE,
   GET_PEOPLE_DATA,
   GET_HERO_INFO_DATA,
 } = PeopleActions;
@@ -18,6 +19,15 @@ export const peopleReducer = handleActions(
       return {
         ...peopleData,
         loading: state,
+        timeStamp: Date.now(),
+      };
+    },
+    [SET_PEOPLE_PAGE_DISPAY_TYPE]: (peopleData, { payload }) => {
+      const { type } = payload;
+
+      return {
+        ...peopleData,
+        dispayType: type,
         timeStamp: Date.now(),
       };
     },

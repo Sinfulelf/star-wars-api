@@ -10,15 +10,16 @@ body,
 #root {
   @include full-space;
   position: relative;
-  overflow-y: hidden;
 }
 
 #root {
   min-width: $page-min-width;
   @extend .ui.black;
 
-  font-family: Muli, "Segoe UI", BlinkMacSystemFont;
-  line-height: 1.2em;
+  *:not(i) {
+    font-family: Muli, "Segoe UI", BlinkMacSystemFont;
+    line-height: 1.2em;
+  }
 
   .ui {
     font-family: Muli, "Segoe UI", BlinkMacSystemFont;
@@ -29,6 +30,12 @@ body,
   @include full-space;
   display: flex;
   flex-direction: column;
+
+  .not-exist-label {
+    text-align: center;
+    padding-top: 2em;
+  }
+
   &__navigation-bar {
     flex: 0 0 65px;
     background: #3f3f3f;
@@ -43,13 +50,14 @@ body,
     flex: 1;
     position: relative;
     background-color: #dcddde;
-    overflow-y: auto;
+    //overflow-y: auto;
+    display: flex;
 
     .page-wrapper {
       @include full-space;
       display: flex;
       flex-direction: column;
-      overflow: auto;
+      overflow: hidden;
 
       & > div {
         display: flex;
@@ -60,14 +68,15 @@ body,
       .page {
         &-header {
           flex: 0 0 60px;
-          padding: 10px .5em 10px 3.5em;
+          padding: 0 1.85em 10px 3.5em;
         }
         &-content {
           flex: 1;
+          overflow: auto;
         }
         &-footer {
           flex: 0 0 70px;
-          padding: 5px .5em 15px 3.5em;
+          padding: 5px 0.5em 15px 3.5em;
         }
       }
     }

@@ -4,6 +4,7 @@ import { HeroDetails } from "../models/dataModels";
 
 export const PeopleActions = {
   SET_PEOPLE_PAGE_LOADING_STATE: "SET_PEOPLE_PAGE_LOADING_STATE",
+  SET_PEOPLE_PAGE_DISPAY_TYPE: "SET_PEOPLE_PAGE_DISPAY_TYPE",
   GET_PEOPLE_DATA: "GET_PEOPLE_DATA",
   GET_HERO_INFO_DATA: "GET_HERO_INFO_DATA",
 };
@@ -19,16 +20,30 @@ function setPeoplePageLoadingState(state) {
   };
 }
 
+const setPeoplePageDispayTypeDispatch = (type) => ({
+  type: PeopleActions.SET_PEOPLE_PAGE_DISPAY_TYPE,
+  payload: { type },
+});
+
+export function setPeoplePageDispayType(type) {
+  return async (dispatch, getState) => {
+    const { peopleData } = getState();
+    if (peopleData.dispayType !== type) {
+      dispatch(setPeoplePageDispayTypeDispatch(type));
+    }
+  };
+}
+
 const getPeopleDataDispatch = (data, count, page) => ({
   type: PeopleActions.GET_PEOPLE_DATA,
   payload: { data, count, page },
 });
 
-export function getPeopleData(page) {
+export function getPeopleData(page, force) {
   return async (dispatch, getState) => {
     const pageStr = (page || 1).toString();
     const { peopleData } = getState();
-    if (pageStr !== peopleData.currentPage) {
+    if (force || pageStr !== peopleData.currentPage) {
       try {
         dispatch(setPeoplePageLoadingState(true));
 
