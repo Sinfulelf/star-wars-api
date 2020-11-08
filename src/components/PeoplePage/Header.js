@@ -5,30 +5,28 @@ import { PeoplePageDispaType } from "../../models/dataModels";
 
 import { Form, Checkbox } from "semantic-ui-react";
 
+import { HeaderFilterInput } from "./HeaderFilterInput";
 import { HeaderPagination } from "./HeaderPagination";
 
 const Header = ({
   pageName,
   isFavorites,
   showFavoriteOnly,
-  dispayType,
-  setPeoplePageDispayType,
+  displayType,
+  setPeoplePagedisplayType,
+  search
 }) => {
   return (
     <div className={`page-header ${pageName}__header`}>
-      <HeaderPagination
-        isFavorites={isFavorites}
-        showFavoriteOnly={showFavoriteOnly}
-      />
-      <Form>
+      <Form className="header-toggle">
         <Form.Field>
           <Checkbox
             slider
             label="Show cards"
-            checked={dispayType === PeoplePageDispaType.cards}
+            checked={displayType === PeoplePageDispaType.cards}
             onChange={() => {
-              setPeoplePageDispayType(
-                dispayType === PeoplePageDispaType.cards
+              setPeoplePagedisplayType(
+                displayType === PeoplePageDispaType.cards
                   ? PeoplePageDispaType.list
                   : PeoplePageDispaType.cards
               );
@@ -36,6 +34,11 @@ const Header = ({
           />
         </Form.Field>
       </Form>
+      <HeaderFilterInput search={search} />
+      <HeaderPagination
+        isFavorites={isFavorites}
+        showFavoriteOnly={showFavoriteOnly}
+      />
     </div>
   );
 };
@@ -44,8 +47,9 @@ Header.propTypes = {
   pageName: PropTypes.string.isRequired,
   isFavorites: PropTypes.bool.isRequired,
   showFavoriteOnly: PropTypes.func.isRequired,
-  dispayType: PropTypes.string.isRequired,
-  setPeoplePageDispayType: PropTypes.func.isRequired,
+  displayType: PropTypes.string.isRequired,
+  setPeoplePagedisplayType: PropTypes.func.isRequired,
+  search: PropTypes.func.isRequired
 };
 
 export const PeoplePageHeader = Header;

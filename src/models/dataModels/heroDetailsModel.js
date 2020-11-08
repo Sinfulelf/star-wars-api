@@ -1,5 +1,12 @@
-import { PlanetDetails, FilmDetail } from "./";
-import { IdUrlModel } from "../generalModels";
+import PT from "prop-types";
+
+import {
+  PlanetDetails,
+  FilmDetail,
+  FilmDetailPropTypes,
+  PlanetDetailsPropTypes,
+} from "./";
+import { IdUrlModel, IdUrlModelPropTypes } from "../generalModels";
 import { StartWarsUrlGetIdRegEx } from "../../data";
 
 export class HeroDetails extends IdUrlModel {
@@ -12,12 +19,13 @@ export class HeroDetails extends IdUrlModel {
   hairColour = "";
   skinColour = "";
   eyeColour = "";
-  birthYear = null;
+  birthYear = "";
   gender = "";
   planet = null;
   films = [];
 
   isFavorit = false;
+  fromPage = "";
 
   static new(resultItem) {
     const entity = new HeroDetails();
@@ -39,3 +47,19 @@ export class HeroDetails extends IdUrlModel {
     return entity;
   }
 }
+
+export const HeroDetailsPropTypes = {
+  ...IdUrlModelPropTypes,
+  name: PT.string.isRequired,
+  height: PT.oneOfType([PT.number, PT.string]).isRequired,
+  mass: PT.oneOfType([PT.number, PT.string]).isRequired,
+  hairColour: PT.string.isRequired,
+  skinColour: PT.string.isRequired,
+  eyeColour: PT.string.isRequired,
+  birthYear: PT.string.isRequired,
+  gender: PT.string.isRequired,
+  planet: PT.shape(PlanetDetailsPropTypes),
+  films: PT.arrayOf(PT.shape(FilmDetailPropTypes)).isRequired,
+  isFavorit: PT.bool.isRequired,
+  fromPage: PT.oneOfType([PT.string, PT.number]).isRequired,
+};

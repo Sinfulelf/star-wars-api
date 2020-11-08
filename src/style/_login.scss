@@ -37,7 +37,7 @@ $login-form-width: 750px;
   }
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: $mobileBreakpoint) {
   #login-screen {
     .login-form {
       width: 0.65 * $login-form-width;

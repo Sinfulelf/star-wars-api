@@ -1,3 +1,5 @@
+import PT from "prop-types";
+
 export class IdUrlModel {
   constructor(pettern) {
     this.#pattern = pettern;
@@ -17,3 +19,8 @@ export class IdUrlModel {
     this.urlValue = val;
   }
 }
+
+export const IdUrlModelPropTypes = {
+  id: PT.oneOfType([PT.string, PT.number]).isRequired,
+  url: PT.string,
+};

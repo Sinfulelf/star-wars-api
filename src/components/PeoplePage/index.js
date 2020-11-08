@@ -2,12 +2,10 @@ import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { Dimmer, Loader } from "semantic-ui-react";
-
 import { RouteData } from "../../data";
 
 import {
-  setPeoplePageDispayType as setPeoplePageDispayTypeAction,
+  setPeoplePagedisplayType as setPeoplePagedisplayTypeAction,
   getPeopleData as getPeopleDataAction,
 } from "../../actions/peopleActions";
 
@@ -22,15 +20,20 @@ class PeoplePage extends PureComponent {
     const { data, actions } = this.props;
     const { people, currentPage } = data.peopleData;
     if (!people.length) {
-      await actions.getPeople(currentPage, true);
+      await actions.getPeople(currentPage);
     }
   }
 
   getPaginationsItemsCount = () => {
-    const { totalPeopleCount, itemsPerRequest } = this.props.data.peopleData;
-    return !!totalPeopleCount
-      ? Math.ceil(totalPeopleCount / itemsPerRequest)
-      : 10;
+    const { totalPeopleCount, itemsPerPage } = this.props.data.peopleData;
+    return !!totalPeopleCount ? Math.ceil(totalPeopleCount / itemsPerPage) : 10;
+  };
+
+  onPaginationPageChange = async (page) => {
+    const { data, actions } = this.props;
+    if (data.peopleData.currentPage != page) {
+      await actions.getPeople(page, data.peopleData.filterName);
+    }
   };
 
   showFavoriteOnly = (state) => {
@@ -40,32 +43,42 @@ class PeoplePage extends PureComponent {
     }
   };
 
+  filterByName = async (value) => {
+    const { data, actions } = this.props;
+    if (data.peopleData.filterName !== value) {
+      await actions.getPeople(1, value);
+    }
+  };
+
   render() {
     const { data, actions } = this.props;
-    const { peopleData, isFavorites } = data;
-    const { getPeople, setPeoplePageDispayType } = actions;
+    const { peopleData, isFavorites, paginatedData } = data;
+    const { setPeoplePagedisplayType } = actions;
 
     const paginationsCount = this.getPaginationsItemsCount();
     return (
       <div className={`page-wrapper ${this.pageName}`}>
-        {peopleData.loading && (
-          <Dimmer active inverted className="p-absolute">
-            <Loader inverted size="huge">Loading</Loader>
-          </Dimmer>
-        )}
         <PeoplePageHeader
           pageName={this.pageName}
           isFavorites={isFavorites}
           showFavoriteOnly={this.showFavoriteOnly}
-          dispayType={peopleData.dispayType}
-          setPeoplePageDispayType={setPeoplePageDispayType}
+          displayType={peopleData.displayType}
+          setPeoplePagedisplayType={setPeoplePagedisplayType}
+          search={this.filterByName}
         />
-        <PeoplePageContent pageName={this.pageName} />
+        <PeoplePageContent
+          pageName={this.pageName}
+          loading={peopleData.loading}
+          isFavorites={isFavorites}
+          displayType={peopleData.displayType}
+          data={paginatedData}
+        />
         <PeoplePageFooter
           pageName={this.pageName}
+          loading={peopleData.loading}
           activePage={peopleData.currentPage}
           totalPages={paginationsCount}
-          onPageChange={getPeople}
+          onPageChange={this.onPaginationPageChange}
         />
       </div>
     );
@@ -76,10 +89,16 @@ const mapStateToProps = (state, ownProps) => {
   const { pathname } = ownProps.location;
   const isFavorites = pathname === RouteData.Favorites;
   const { peopleData } = state;
+
+  const { people, currentPage } = peopleData;
+
+  const paginatedData = people.filter((x) => x && x.fromPage === currentPage);
+
   return {
     data: {
       peopleData,
       isFavorites,
+      paginatedData,
     },
   };
 };
@@ -87,11 +106,11 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
-      setPeoplePageDispayType: (type) => {
-        dispatch(setPeoplePageDispayTypeAction(type));
+      setPeoplePagedisplayType: (type) => {
+        dispatch(setPeoplePagedisplayTypeAction(type));
       },
-      getPeople: async (page, force) => {
-        await dispatch(getPeopleDataAction(page, force));
+      getPeople: async (page, search = "") => {
+        await dispatch(getPeopleDataAction(page, search));
       },
     },
   };

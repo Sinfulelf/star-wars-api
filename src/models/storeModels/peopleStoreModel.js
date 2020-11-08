@@ -7,11 +7,15 @@ export class PeopleStore {
   people = [];
   totalPeopleCount = 0;
   person = null;
+
+  filterName = "";
+
   currentPage = "1";
+  uploadedPages = [];
 
-  itemsPerRequest = 10;
+  itemsPerPage = 10;
 
-  dispayType = PeoplePageDispaType.list;
+  displayType = PeoplePageDispaType.list;
 }
 
 export const PeopleStorePropTypes = {
@@ -20,5 +24,9 @@ export const PeopleStorePropTypes = {
   people: PT.arrayOf(PT.instanceOf(HeroDetails)),
   totalPeopleCount: PT.number,
   person: PT.oneOfType([PT.instanceOf(null), PT.instanceOf(HeroDetails)]),
-  currentPage: PT.number,
+  currentPage: PT.string,
+  filterName: PT.string,
+  uploadedPages: PT.arrayOf(PT.string),
+
+  displayType: PT.oneOf([PeoplePageDispaType.list, PeoplePageDispaType.cards]),
 };

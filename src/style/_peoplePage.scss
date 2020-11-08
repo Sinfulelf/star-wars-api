@@ -1,0 +1,109 @@
+.people-page {
+  &__header {
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    & > .ui.menu {
+      margin-top: 0;
+      .item {
+        .icon {
+          transition: color 0.2s;
+        }
+        &.active {
+          &.people-menu {
+            .icon {
+              @extend .ui.blue;
+            }
+          }
+          &.favorites-menu {
+            .icon {
+              @extend .ui.red;
+            }
+          }
+        }
+      }
+    }
+
+    & > .header-toggle,
+    & > .header-input {
+      margin-top: 0.5em;
+      padding: 0 6px;
+    }
+
+    .header-toggle .ui.slider label {
+      line-height: 0.75em;
+    }
+  }
+
+  &__content {
+    .heroes-cards__wrapper {
+      @include full-space;
+      position: relative;
+      display: flex;
+      overflow-y: auto;
+      overflow-x: hidden;
+      .hero-card {
+        position: absolute;
+        z-index: 3;
+        background-color: #fff;
+        padding: 0 1em;
+        display: flex;
+        align-items: center;
+        @extend .card-shadow-1;
+        border-radius: 2px;
+        margin-left: 2px;
+
+        cursor: pointer;
+        transition: text-shadow 0.05s ease-in, top left 0.5s ease-in-out;
+        user-select: none;
+
+        &:hover {
+          @extend .card-shadow-2;
+          text-shadow: 0.5px 0.5px 1px $grey-colour;
+        }
+        &.active {
+          margin-left: 5px;
+        }
+
+        &__header {
+          display: flex;
+          flex-direction: row;
+          max-height: 35px;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          .hero-name {
+            @include ellipsis;
+            margin-bottom: 0;
+            flex: 1 1 auto;
+          }
+          .favor-icon {
+            &:active {
+              transform: scale(0.9);
+            }
+          }
+        }
+      }
+      .ui.segment.user-info {
+        @extend .card-shadow-1;
+        flex: 1;
+        margin-top: 0;
+        z-index: 2;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobileBreakpoint) {
+  .layout-container__content {
+    .people-page {
+      &__header {
+        flex: 0 0 120px !important;
+        flex-wrap: wrap;
+
+        .ui.menu {
+          margin: 0.758em auto 0 0.5em !important;
+        }
+      }
+    }
+  }
+}

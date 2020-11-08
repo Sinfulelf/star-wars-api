@@ -18,3 +18,21 @@
 @mixin position-absolute {
   position: absolute !important;
 }
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin hover-active-item {
+  cursor: pointer;
+  transition: all 0.05s ease-in;
+  user-select: none;
+  &:hover {
+    text-shadow: 0.5px 0.5px 1px $grey-colour;
+  }
+  &:active {
+    transform: scale(0.99);
+  }
+}

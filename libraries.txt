@@ -6,4 +6,4 @@
 4) redux-thunk;
 5) redux-actions;
 6) react-router react-router-dom;
-7) 
+7) react-resize-detector

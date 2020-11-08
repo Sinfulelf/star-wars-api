@@ -5,6 +5,8 @@ import { HeroDetails } from "../models/dataModels";
 export const PeopleActions = {
   SET_PEOPLE_PAGE_LOADING_STATE: "SET_PEOPLE_PAGE_LOADING_STATE",
   SET_PEOPLE_PAGE_DISPAY_TYPE: "SET_PEOPLE_PAGE_DISPAY_TYPE",
+  SET_PEOPLE_PAGE_PAGINATION_PAGE: "SET_PEOPLE_PAGE_PAGINATION_PAGE",
+  RESET_PEOPLE_DATA: "RESET_PEOPLE_DATA",
   GET_PEOPLE_DATA: "GET_PEOPLE_DATA",
   GET_HERO_INFO_DATA: "GET_HERO_INFO_DATA",
 };
@@ -20,43 +22,58 @@ function setPeoplePageLoadingState(state) {
   };
 }
 
-const setPeoplePageDispayTypeDispatch = (type) => ({
+const setPeoplePagedisplayTypeDispatch = (type) => ({
   type: PeopleActions.SET_PEOPLE_PAGE_DISPAY_TYPE,
   payload: { type },
 });
 
-export function setPeoplePageDispayType(type) {
+export function setPeoplePagedisplayType(type) {
   return async (dispatch, getState) => {
     const { peopleData } = getState();
-    if (peopleData.dispayType !== type) {
-      dispatch(setPeoplePageDispayTypeDispatch(type));
+    if (peopleData.displayType !== type) {
+      dispatch(setPeoplePagedisplayTypeDispatch(type));
     }
   };
 }
 
-const getPeopleDataDispatch = (data, count, page) => ({
-  type: PeopleActions.GET_PEOPLE_DATA,
-  payload: { data, count, page },
+const setPeoplePagePaginationPageDispatch = (page) => ({
+  type: PeopleActions.SET_PEOPLE_PAGE_PAGINATION_PAGE,
+  payload: { page },
 });
 
-export function getPeopleData(page, force) {
+const resetPeopleData = () => ({
+  type: PeopleActions.RESET_PEOPLE_DATA,
+});
+
+const getPeopleDataDispatch = (data, count, page, search) => ({
+  type: PeopleActions.GET_PEOPLE_DATA,
+  payload: { data, count, page, search },
+});
+
+export function getPeopleData(page, search) {
   return async (dispatch, getState) => {
     const pageStr = (page || 1).toString();
     const { peopleData } = getState();
-    if (force || pageStr !== peopleData.currentPage) {
+    const newSearch = search !== peopleData.filterName;
+    if (newSearch) {
+      dispatch(resetPeopleData());
+    }
+
+    if (newSearch || peopleData.uploadedPages.indexOf(pageStr) === -1) {
       try {
         dispatch(setPeoplePageLoadingState(true));
 
         const { count, results } = await getData({
           baseUrl: StartWarsUrlData.GET_PEOPLE,
-          query: { page },
+          query: { page, search: search },
         });
         if (results && results.length) {
           dispatch(
             getPeopleDataDispatch(
               results.map((x) => HeroDetails.new(x)),
               count,
-              pageStr
+              pageStr,
+              search
             )
           );
         } else {
@@ -69,6 +86,8 @@ export function getPeopleData(page, force) {
       } finally {
         dispatch(setPeoplePageLoadingState(false));
       }
+    } else {
+      dispatch(setPeoplePagePaginationPageDispatch(pageStr));
     }
   };
 }

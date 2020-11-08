@@ -1,4 +1,6 @@
-import { IdUrlModel } from "../generalModels";
+import PT from "prop-types";
+
+import { IdUrlModel, IdUrlModelPropTypes } from "../generalModels";
 import { StartWarsUrlGetIdRegEx } from "../../data";
 
 export class PlanetDetails extends IdUrlModel {
@@ -11,3 +13,10 @@ export class PlanetDetails extends IdUrlModel {
   population = 0;
   climate = "";
 }
+
+export const PlanetDetailsPropTypes ={
+  ...IdUrlModelPropTypes,
+  name: PT.string,
+  population: PT.number,
+  climate: PT.string,
+};
