@@ -10,6 +10,8 @@ import { personCardConfig } from "./personCardConfig";
 
 import { Header, Icon } from "semantic-ui-react";
 
+import { HeroInfo } from "./HeroInfo";
+
 class PersonCardItem extends PureComponent {
   state = {
     style: {},
@@ -57,10 +59,29 @@ class PersonCardItem extends PureComponent {
   };
 
   render() {
-    const { item } = this.props;
+    const {
+      item,
+      displayType,
+      toggleFavoriteHero,
+      favoriteHeroes,
+      observerIndex,
+      index,
+      setObservedItemIndex,
+    } = this.props;
     const { style, isActive, heartIconFilled } = this.state;
+
+    const isFavorite = favoriteHeroes.indexOf(item.id) !== -1;
+    const isObserved = index === observerIndex;
+
     return (
-      <div className={`hero-card ${isActive ? "active" : ""}`} style={style}>
+      <div
+        className={`hero-card ${
+          isActive || (isObserved && displayType === PeoplePageDispaType.list)
+            ? "active"
+            : ""
+        } ${displayType}`}
+        style={style}
+      >
         <div className="hero-card__header">
           <Header
             as="h3"
@@ -75,17 +96,32 @@ class PersonCardItem extends PureComponent {
             onMouseDown={(_) => {
               this.setCardActiveState(true);
             }}
+            onClick={() => {
+              if (!isObserved) {
+                setObservedItemIndex(index);
+              }
+            }}
           >
             {item.name}
           </Header>
           <Icon
-            name={`heart ${heartIconFilled ? "red" : "outline"}`}
-            style={{ marginTop: heartIconFilled ? -2 : 0 }}
-            className="favor-icon"
+            name="heart"
+            className={`favor-icon ${
+              isFavorite ? "red" : heartIconFilled ? "pale-red" : "outline"
+            }`}
             onMouseEnter={(_) => this.setHeartIconFilled(true)}
             onMouseLeave={(_) => this.setHeartIconFilled(false)}
+            onClick={() => {
+              toggleFavoriteHero(item.id);
+            }}
           />
+          {displayType === PeoplePageDispaType.list && isObserved && (
+            <Icon className="observer-caret" name="caret right" size="big" />
+          )}
         </div>
+        {displayType === PeoplePageDispaType.cards && (
+          <HeroInfo item={item} cardView/>
+        )}
       </div>
     );
   }
@@ -97,6 +133,10 @@ PersonCardItem.propTypes = {
   displayType: PT.oneOf([PeoplePageDispaType.cards, PeoplePageDispaType.list])
     .isRequired,
   item: PT.shape(HeroDetailsPropTypes).isRequired,
+  favoriteHeroes: PT.arrayOf(PT.number).isRequired,
+  toggleFavoriteHero: PT.func.isRequired,
+  observerIndex: PT.number.isRequired,
+  setObservedItemIndex: PT.func.isRequired,
 };
 
 export const PersonCard = PersonCardItem;

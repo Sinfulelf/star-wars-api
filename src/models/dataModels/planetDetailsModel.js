@@ -12,6 +12,7 @@ export class PlanetDetails extends IdUrlModel {
   name = "";
   population = 0;
   climate = "";
+  loaded = false;
 }
 
 export const PlanetDetailsPropTypes ={

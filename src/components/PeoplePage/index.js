@@ -3,10 +3,15 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { RouteData } from "../../data";
+import { HeroDetails } from "../../models/dataModels";
 
 import {
   setPeoplePagedisplayType as setPeoplePagedisplayTypeAction,
   getPeopleData as getPeopleDataAction,
+  clearPeopleData as clearPeopleDataAction,
+  toggleFavoritesHeroes as toggleFavoritesHeroesAction,
+  getFavoriteHeroes as getFavoriteHeroesAction,
+  setObservedItemIndex as setObservedItemIndexAction,
 } from "../../actions/peopleActions";
 
 import { PeoplePageHeader } from "./Header";
@@ -21,7 +26,12 @@ class PeoplePage extends PureComponent {
     const { people, currentPage } = data.peopleData;
     if (!people.length) {
       await actions.getPeople(currentPage);
+      await actions.getFavoriteHeroes();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.actions.clearPeopleData();
   }
 
   getPaginationsItemsCount = () => {
@@ -53,7 +63,11 @@ class PeoplePage extends PureComponent {
   render() {
     const { data, actions } = this.props;
     const { peopleData, isFavorites, paginatedData } = data;
-    const { setPeoplePagedisplayType } = actions;
+    const {
+      setPeoplePagedisplayType,
+      toggleFavoriteHero,
+      setObservedItemIndex,
+    } = actions;
 
     const paginationsCount = this.getPaginationsItemsCount();
     return (
@@ -72,6 +86,10 @@ class PeoplePage extends PureComponent {
           isFavorites={isFavorites}
           displayType={peopleData.displayType}
           data={paginatedData}
+          favoriteHeroes={peopleData.favoriteHeroes}
+          toggleFavoriteHero={toggleFavoriteHero}
+          observerIndex={peopleData.observerIndex}
+          setObservedItemIndex={setObservedItemIndex}
         />
         <PeoplePageFooter
           pageName={this.pageName}
@@ -90,9 +108,14 @@ const mapStateToProps = (state, ownProps) => {
   const isFavorites = pathname === RouteData.Favorites;
   const { peopleData } = state;
 
-  const { people, currentPage } = peopleData;
+  const { people, currentPage, itemsPerPage } = peopleData;
 
-  const paginatedData = people.filter((x) => x && x.fromPage === currentPage);
+  //const paginatedData = people.filter((x) => x && x.fromPage === currentPage);
+
+  const paginatedData = people
+    .slice(itemsPerPage * (currentPage - 1), itemsPerPage * currentPage)
+    .filter((x) => typeof x !== "undefined")
+    .map((x) => x || new HeroDetails());
 
   return {
     data: {
@@ -111,6 +134,18 @@ const mapDispatchToProps = (dispatch) => {
       },
       getPeople: async (page, search = "") => {
         await dispatch(getPeopleDataAction(page, search));
+      },
+      clearPeopleData: () => {
+        dispatch(clearPeopleDataAction());
+      },
+      toggleFavoriteHero: (id) => {
+        dispatch(toggleFavoritesHeroesAction([id]));
+      },
+      getFavoriteHeroes: async () => {
+        await dispatch(getFavoriteHeroesAction());
+      },
+      setObservedItemIndex: (index) => {
+        dispatch(setObservedItemIndexAction(index));
       },
     },
   };

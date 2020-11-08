@@ -35,36 +35,42 @@
   }
 
   &__content {
+    overflow-x: auto !important;
+    //padding-right: 1.75em;
     .heroes-cards__wrapper {
       @include full-space;
       position: relative;
       display: flex;
       overflow-y: auto;
       overflow-x: hidden;
+      min-width: 472px;
       .hero-card {
         position: absolute;
         z-index: 3;
         background-color: #fff;
-        padding: 0 1em;
+        padding: 0 0.5em 0 1em;
         display: flex;
+        flex-direction: column;
         align-items: center;
         @extend .card-shadow-1;
         border-radius: 2px;
         margin-left: 2px;
 
-        cursor: pointer;
         transition: text-shadow 0.05s ease-in, top left 0.5s ease-in-out;
-        user-select: none;
 
         &:hover {
           @extend .card-shadow-2;
           text-shadow: 0.5px 0.5px 1px $grey-colour;
         }
-        &.active {
-          margin-left: 5px;
+        &.active.list {
+          margin-left: 7px;
+        }
+        &.active.cards {
+          transform: scale(0.99);
         }
 
         &__header {
+          flex: 0 0 35px;
           display: flex;
           flex-direction: row;
           max-height: 35px;
@@ -75,11 +81,26 @@
             @include ellipsis;
             margin-bottom: 0;
             flex: 1 1 auto;
+            cursor: pointer;
           }
           .favor-icon {
+            cursor: pointer;
+            align-items: center;
+            display: flex;
             &:active {
               transform: scale(0.9);
             }
+
+            &.pale-red {
+              opacity: 0.7;
+              @extend .ui.red;
+            }
+          }
+
+          .observer-caret {
+            position: absolute;
+            right: -25px;
+            margin-top: 1px;
           }
         }
       }
@@ -88,6 +109,46 @@
         flex: 1;
         margin-top: 0;
         z-index: 2;
+        margin-bottom: 5px;
+        margin-right: 5px;
+      }
+    }
+
+    .hero-info {
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      &__properties {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        .property {
+          padding: 0.5em 2.1em 0.5em 0.7em;
+          &-name {
+            margin-bottom: 0.3em;
+          }
+          &-content {
+            display: flex;
+            text-indent: 4px;
+            font-size: 20px;
+          }
+        }
+      }
+
+      .bottom-mask {
+        height: 40px;
+        width: 100%;
+        bottom: 0px;
+        position: absolute;
+        background: rgb(255, 255, 255);
+        background: linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.73) 35%,
+          rgba(255, 255, 255, 0) 100%
+        );
       }
     }
   }

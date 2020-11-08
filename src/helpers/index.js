@@ -5,3 +5,4 @@
 
 export * from "./cookiesHelpers";
 export * from "./httpHelpers";
+export * from "./storageHelpers";

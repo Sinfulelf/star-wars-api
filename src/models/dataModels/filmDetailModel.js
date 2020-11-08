@@ -11,6 +11,7 @@ export class FilmDetail extends IdUrlModel {
 
   title = "";
   releaseDate = null;
+  loaded = false;
 }
 
 export const FilmDetailPropTypes = {
