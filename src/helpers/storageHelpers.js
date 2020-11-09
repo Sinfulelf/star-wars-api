@@ -8,7 +8,7 @@ const favoritesHeroesKey = "star-wars-api-favorites-heroes";
 /**
  * Get favorites heroes from localStorage;
  *
- * @returns {Array<number>} array of heroes ids
+ * @returns {Object} id-name of heroes
  * 
  * @memberof Helpers.storageHelpers
  */
@@ -22,10 +22,10 @@ export function getFavoritesHeroesToStorage() {
 
 /**
  * Set favorites heroes to localStorage;
- * @param {Array<numbers>} ids array of favorite heroes ids
+ * @param {Object} items id-name of favorite heroes
  * 
  * @memberof Helpers.storageHelpers
  */
-export function setFavoritesHeroesToStorage(ids) {
-  localStorage.setItem(favoritesHeroesKey, JSON.stringify(ids));
+export function setFavoritesHeroesToStorage(items) {
+  localStorage.setItem(favoritesHeroesKey, JSON.stringify(items));
 }

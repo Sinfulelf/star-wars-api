@@ -54,7 +54,7 @@ class Content extends PureComponent {
             <div className="heroes-cards__wrapper">
               {data.map((item, index) => (
                 <PersonCard
-                  key={item.urlValue}
+                  key={item.urlValue || index}
                   wrapperWidth={width}
                   index={index}
                   displayType={displayType}
@@ -110,7 +110,7 @@ Content.propTypes = {
   ]).isRequired,
   observerIndex: PropTypes.number.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape(HeroDetailsPropTypes)).isRequired,
-  favoriteHeroes: PropTypes.arrayOf(PropTypes.number).isRequired,
+  favoriteHeroes: PropTypes.object.isRequired,
   toggleFavoriteHero: PropTypes.func.isRequired,
   setObservedItemIndex: PropTypes.func.isRequired,
   relationships: PropTypes.shape(RelationshipsStorePropTypes).isRequired,

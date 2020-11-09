@@ -14,6 +14,7 @@ export const PeopleActions = {
   RESET_PEOPLE_DATA: "RESET_PEOPLE_DATA",
   CLEAR_PEOPLE_DATA: "CLEAR_PEOPLE_DATA",
   GET_PEOPLE_DATA: "GET_PEOPLE_DATA",
+  UPDATE_HERO_DATA: "UPDATE_HERO_DATA",
   SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE: "SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE",
 
   TOGGLE_FAVORITE_HEROES: "TOGGLE_FAVORITE_HEROES",
@@ -50,7 +51,7 @@ const setPeoplePagePaginationPageDispatch = (page) => ({
   payload: { page },
 });
 
-const resetPeopleData = () => ({
+const resetPeopleDataDispatch = () => ({
   type: PeopleActions.RESET_PEOPLE_DATA,
 });
 
@@ -75,41 +76,44 @@ export function getPeopleData(page, search) {
     const { peopleData } = getState();
     const newSearch = search !== peopleData.filterName;
     if (newSearch) {
-      dispatch(resetPeopleData());
+      dispatch(resetPeopleDataDispatch());
     }
+    if (!peopleData.showFavoritesOnly) {
+      if (newSearch || peopleData.uploadedPages.indexOf(pageStr) === -1) {
+        try {
+          dispatch(setPeoplePageLoadingState(true));
 
-    if (newSearch || peopleData.uploadedPages.indexOf(pageStr) === -1) {
-      try {
-        dispatch(setPeoplePageLoadingState(true));
+          const query = { page };
+          if (search) query.search = search;
 
-        const query = { page };
-        if (search) query.search = search;
-
-        const { count, results } = await getData({
-          baseUrl: StarWarsUrlData.GET_PEOPLE,
-          query,
-        });
-        if (results) {
-          dispatch(
-            getPeopleDataDispatch(
-              results.map((x) => HeroDetails.new(x)),
-              count,
-              pageStr,
-              search
-            )
-          );
-        } else {
-          const exMessage = "No data from response";
-          throw exMessage;
+          const { count, results } = await getData({
+            baseUrl: StarWarsUrlData.GET_PEOPLE,
+            query,
+          });
+          if (results) {
+            dispatch(
+              getPeopleDataDispatch(
+                results.map((x) => HeroDetails.new(x)),
+                count,
+                pageStr,
+                search
+              )
+            );
+          } else {
+            const exMessage = "No data from response";
+            throw exMessage;
+          }
+        } catch (ex) {
+          console.log("ex", ex);
+          //todo Add message about exception
+        } finally {
+          dispatch(setPeoplePageLoadingState(false));
         }
-      } catch (ex) {
-        console.log(ex);
-        //todo Add message about exception
-      } finally {
-        dispatch(setPeoplePageLoadingState(false));
+      } else {
+        dispatch(setPeoplePagePaginationPageDispatch(pageStr));
       }
     } else {
-      dispatch(setPeoplePagePaginationPageDispatch(pageStr));
+      await dispatch(getPeopleFavoriteData(page, search));
     }
   };
 }
@@ -119,42 +123,36 @@ const setPeoplePageFavoritesViewModeDispatch = (state) => ({
   payload: { state },
 });
 export function setPeoplePageFavoritesViewMode(state) {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch(setPeoplePageFavoritesViewModeDispatch(state));
+
+    const { peopleData } = getState();
+    const { filterName } = peopleData;
     if (state) {
-      const { peopleData } = getState();
-      const { people, favoriteHeroes } = peopleData;
-      const existingFavoriteData = [];
-      const favoriteDataToUpload = [];
-
-      for (let i = 0; i < favoriteHeroes.length; i++) {
-        const item = people.find((x) => x && x.id === favoriteHeroes[i]);
-        if (item) {
-          existingFavoriteData.push(item);
-        } else {
-          favoriteDataToUpload.push(i);
-        }
-      }
-
-      console.log(favoriteDataToUpload);
-      console.log(existingFavoriteData);
+      await dispatch(getPeopleFavoriteData(1, filterName));
     } else {
-      
+      dispatch(resetPeopleDataDispatch());
+      await dispatch(getPeopleData(1, filterName));
     }
   };
 }
 
-const toggleFavoritesHeroesDispatch = (ids) => ({
+const toggleFavoritesHeroesDispatch = (items) => ({
   type: PeopleActions.TOGGLE_FAVORITE_HEROES,
-  payload: { ids },
+  payload: { items },
 });
-export function toggleFavoritesHeroes(ids) {
-  return (dispatch, getState) => {
-    dispatch(toggleFavoritesHeroesDispatch(ids));
-    const { userInfo } = getState();
+export function toggleFavoritesHeroes(items) {
+  return async (dispatch, getState) => {
+    dispatch(toggleFavoritesHeroesDispatch(items));
+    const { userInfo, peopleData } = getState();
     if (userInfo.offlineMode) {
-      const { peopleData } = getState();
       setFavoritesHeroesToStorage(peopleData.favoriteHeroes);
+    } else {
+      //todo
+    }
+    if (peopleData.showFavoritesOnly) {
+      const { currentPage, filterName } = peopleData;
+      await dispatch(getPeopleFavoriteData(currentPage, filterName));
     }
   };
 }
@@ -175,5 +173,85 @@ const setObservedItemIndexDispatch = (index) => ({
 export function setObservedItemIndex(index) {
   return (dispatch) => {
     dispatch(setObservedItemIndexDispatch(index));
+  };
+}
+
+function getPeopleFavoriteData(page, search) {
+  return async (dispatch, getState) => {
+    const { peopleData } = getState();
+    const { favoriteHeroes, people, itemsPerPage } = peopleData;
+
+    try {
+      dispatch(setPeoplePageLoadingState(true));
+      const filterName = (search || "").toLowerCase();
+
+      const idsPerPage = Object.keys(favoriteHeroes)
+        .map((key) => ({ id: Number(key), name: favoriteHeroes[key] }))
+        .filter(
+          (x) => x && (x.name || "").toLowerCase().indexOf(filterName) !== -1
+        )
+        .slice(itemsPerPage * (page - 1), itemsPerPage * page);
+
+      if (!idsPerPage.length && page > 1) {
+        await dispatch(getPeopleFavoriteData(page - 1, search));
+      } else {
+        const itemsToUpload = [];
+        const items = [];
+
+        for (let i of idsPerPage) {
+          const item = people.find((x) => x && x.id === i.id);
+          if (item) {
+            items.push(item);
+          } else {
+            itemsToUpload.push(i.id);
+            const mockItem = new HeroDetails();
+            mockItem.id = i.id;
+            mockItem.name = i.name;
+            mockItem.loaded = false;
+            items.push(mockItem);
+          }
+        }
+
+        dispatch(resetPeopleDataDispatch());
+        dispatch(
+          getPeopleDataDispatch(
+            items,
+            Object.keys(favoriteHeroes).length,
+            page.toString(),
+            search
+          )
+        );
+        dispatch(setPeoplePageLoadingState(false));
+        for (let id of itemsToUpload) {
+          await dispatch(updateHeroData(id));
+        }
+      }
+    } catch (ex) {
+      console.log("ex", ex);
+      //todo Add message about exception
+      dispatch(setPeoplePageLoadingState(false));
+    }
+  };
+}
+
+const updateHeroDataDispatch = (hero) => ({
+  type: PeopleActions.UPDATE_HERO_DATA,
+  payload: { hero },
+});
+
+function updateHeroData(id) {
+  return async (dispatch) => {
+    try {
+      const data = await getData({
+        baseUrl: StarWarsUrlData.GET_PEOPLE,
+        param: id,
+      });
+
+      const hero = HeroDetails.new(data);
+      dispatch(updateHeroDataDispatch(hero));
+    } catch (ex) {
+      console.log("ex", ex);
+      //todo Add message about exception
+    }
   };
 }

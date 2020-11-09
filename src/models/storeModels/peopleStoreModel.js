@@ -14,7 +14,7 @@ export class PeopleStore {
   currentPage = "1";
   uploadedPages = [];
 
-  favoriteHeroes = [];
+  favoriteHeroes = {};
 
   itemsPerPage = 10;
   exFavorite = false;
@@ -33,7 +33,7 @@ export const PeopleStorePropTypes = {
   filterName: PT.string,
   uploadedPages: PT.arrayOf(PT.string),
 
-  favoriteHeroes: PT.arrayOf(PT.number),
+  favoriteHeroes: PT.object,
 
   exFavorite: PT.bool,
 

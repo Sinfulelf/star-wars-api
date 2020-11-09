@@ -146,8 +146,8 @@ const mapDispatchToProps = (dispatch) => {
       clearPeopleData: () => {
         dispatch(clearPeopleDataAction());
       },
-      toggleFavoriteHero: (id) => {
-        dispatch(toggleFavoritesHeroesAction([id]));
+      toggleFavoriteHero: (id, name) => {
+        dispatch(toggleFavoritesHeroesAction({[id]: name}));
       },
       getFavoriteHeroes: async () => {
         await dispatch(getFavoriteHeroesAction());

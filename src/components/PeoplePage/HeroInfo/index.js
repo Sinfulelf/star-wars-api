@@ -19,7 +19,9 @@ class HeroInfoItem extends PureComponent {
     const { item, showFullInfo } = this.props;
     if (
       item.id !== prevProps.item.id ||
-      showFullInfo !== prevProps.showFullInfo
+      showFullInfo !== prevProps.showFullInfo ||
+      (!prevProps.planet && item.planet) ||
+      (prevProps.films && prevProps.films.length !== item.films.length)
     ) {
       await this.uploadHeroAdditionalData();
     }
@@ -34,7 +36,7 @@ class HeroInfoItem extends PureComponent {
       showFullInfo,
     } = this.props;
     if (showFullInfo) {
-      if (!(item.planet.id in relationships.planestsData)) {
+      if (item.planet && !(item.planet.id in relationships.planestsData)) {
         await getPlanetData(item.planet.id);
       }
 
@@ -57,11 +59,15 @@ class HeroInfoItem extends PureComponent {
           <div className="bottom-mask"></div>
         ) : (
           <>
-            <Divider />
-            <HeroHomeProperty
-              item={item}
-              planets={relationships.planestsData}
-            />
+            {!!item.planet && (
+              <>
+                <Divider />
+                <HeroHomeProperty
+                  item={item}
+                  planets={relationships.planestsData}
+                />
+              </>
+            )}
             <Divider />
             <HeroFilmsProperty item={item} films={relationships.filmsData} />
           </>

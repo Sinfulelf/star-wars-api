@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const ParagraphMock = ({ width, height = 14 }) => (
+export const ParagraphMock = ({ width, height = 22 }) => (
   <div
     className="paragraph-mock ui placeholder"
     style={{

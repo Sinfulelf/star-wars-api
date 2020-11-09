@@ -24,6 +24,8 @@ export class HeroDetails extends IdUrlModel {
   planet = null;
   films = [];
 
+  loaded = true;
+
   fromPage = "";
 
   static new(resultItem) {

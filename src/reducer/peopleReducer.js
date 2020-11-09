@@ -9,6 +9,7 @@ const {
   RESET_PEOPLE_DATA,
   CLEAR_PEOPLE_DATA,
   GET_PEOPLE_DATA,
+  UPDATE_HERO_DATA,
   SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE,
   TOGGLE_FAVORITE_HEROES,
   SET_OBSERVED_ITEM_INDEX,
@@ -98,6 +99,22 @@ export const peopleReducer = handleActions(
         timeStamp: Date.now(),
       };
     },
+    [UPDATE_HERO_DATA]: (peopleData, { payload }) => {
+      const { hero } = payload;
+      return {
+        ...peopleData,
+        timeStamp: Date.now(),
+        people: peopleData.people.map((x) => {
+          if (x && x.id === hero.id) {
+            return {
+              ...x,
+              ...hero,
+            };
+          }
+          return x;
+        }),
+      };
+    },
     [SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE]: (peopleData, { payload }) => {
       const { state } = payload;
 
@@ -108,24 +125,21 @@ export const peopleReducer = handleActions(
       };
     },
     [TOGGLE_FAVORITE_HEROES]: (peopleData, { payload }) => {
-      const { ids } = payload;
+      const { items } = payload;
+
+      const newFavorites = { ...peopleData.favoriteHeroes };
+      for (let i in items) {
+        if (i in newFavorites) {
+          delete newFavorites[i];
+        } else {
+          newFavorites[i] = items[i];
+        }
+      }
+
       return {
         ...peopleData,
         timeStamp: Date.now(),
-        favoriteHeroes: ids
-          .reduce(
-            (acc, id) => {
-              const indexOfId = acc.indexOf(id);
-              if (indexOfId === -1) {
-                acc.push(id);
-              } else {
-                acc[indexOfId] = null;
-              }
-              return acc;
-            },
-            [...peopleData.favoriteHeroes]
-          )
-          .filter((x) => x !== null),
+        favoriteHeroes: newFavorites,
       };
     },
     [SET_OBSERVED_ITEM_INDEX]: (peopleData, { payload }) => {

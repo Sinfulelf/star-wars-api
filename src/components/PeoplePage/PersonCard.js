@@ -8,7 +8,7 @@ import {
 
 import { personCardConfig } from "./personCardConfig";
 
-import { Header, Icon } from "semantic-ui-react";
+import { Header, Icon, Dimmer, Loader } from "semantic-ui-react";
 
 import { HeroInfo } from "./HeroInfo";
 
@@ -72,7 +72,7 @@ class PersonCardItem extends PureComponent {
     } = this.props;
     const { style, isActive, heartIconFilled } = this.state;
 
-    const isFavorite = favoriteHeroes.indexOf(item.id) !== -1;
+    const isFavorite = !!favoriteHeroes[item.id];
     const isObserved = index === observerIndex;
 
     return (
@@ -89,6 +89,11 @@ class PersonCardItem extends PureComponent {
           }
         }}
       >
+        {!item.loaded && (
+          <Dimmer active inverted className="p-absolute">
+            <Loader inverted size="small" />
+          </Dimmer>
+        )}
         <div className="hero-card__header">
           <Header
             as="h3"
@@ -115,7 +120,7 @@ class PersonCardItem extends PureComponent {
             onMouseLeave={(_) => this.setHeartIconFilled(false)}
             onClick={(e) => {
               e.stopPropagation();
-              toggleFavoriteHero(item.id);
+              toggleFavoriteHero(item.id, item.name);
             }}
           />
           {displayType === PeoplePageDispaType.list && isObserved && (
@@ -136,7 +141,7 @@ PersonCardItem.propTypes = {
   displayType: PT.oneOf([PeoplePageDispaType.cards, PeoplePageDispaType.list])
     .isRequired,
   item: PT.shape(HeroDetailsPropTypes).isRequired,
-  favoriteHeroes: PT.arrayOf(PT.number).isRequired,
+  favoriteHeroes: PT.object.isRequired,
   toggleFavoriteHero: PT.func.isRequired,
   observerIndex: PT.number.isRequired,
   setObservedItemIndex: PT.func.isRequired,

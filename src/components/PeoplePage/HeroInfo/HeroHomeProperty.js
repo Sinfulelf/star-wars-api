@@ -15,7 +15,7 @@ const HeroHomePropertyItem = ({ item, planets }) => {
         key="name"
         name="Name"
         value={
-          !!planet ? planet.name : <ParagraphMock width={110} height={22} />
+          !!planet ? planet.name : <ParagraphMock width={110} />
         }
       />
       <HeroProperty
@@ -25,7 +25,7 @@ const HeroHomePropertyItem = ({ item, planets }) => {
           !!planet ? (
             planet.population
           ) : (
-            <ParagraphMock width={120} height={22} />
+            <ParagraphMock width={120}  />
           )
         }
       />
@@ -33,7 +33,7 @@ const HeroHomePropertyItem = ({ item, planets }) => {
         key="climate"
         name="Climate"
         value={
-          !!planet ? planet.climate : <ParagraphMock width={180} height={22} />
+          !!planet ? planet.climate : <ParagraphMock width={180}  />
         }
       />
     </div>

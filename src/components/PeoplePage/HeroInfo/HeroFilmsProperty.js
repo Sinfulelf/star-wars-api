@@ -17,7 +17,7 @@ const HeroFilmsPropertyItem = ({ item, films }) => {
             films[x.id] ? (
               `${films[x.id].title} by ${films[x.id].releaseDate}`
             ) : (
-              <ParagraphMock width={240} height={22} />
+              <ParagraphMock width={240}  />
             )
           }
         />
