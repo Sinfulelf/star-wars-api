@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { RouteData } from "../../data";
 import { HeroDetails } from "../../models/dataModels";
 
 import {
@@ -12,7 +11,13 @@ import {
   toggleFavoritesHeroes as toggleFavoritesHeroesAction,
   getFavoriteHeroes as getFavoriteHeroesAction,
   setObservedItemIndex as setObservedItemIndexAction,
+  setPeoplePageFavoritesViewMode as setPeoplePageFavoritesViewModeAction,
 } from "../../actions/peopleActions";
+
+import {
+  getFilmData as getFilmDataAction,
+  getPlanetData as getPlanetDataAction,
+} from "../../actions/relationshipsActions";
 
 import { PeoplePageHeader } from "./Header";
 import { PeoplePageContent } from "./Content";
@@ -47,9 +52,9 @@ class PeoplePage extends PureComponent {
   };
 
   showFavoriteOnly = (state) => {
-    const { isFavorites } = this.props.data;
-    if (isFavorites !== state) {
-      this.props.history.push(state ? RouteData.Favorites : RouteData.People);
+    const { showFavoritesOnly } = this.props.data.peopleData;
+    if (showFavoritesOnly !== state) {
+      this.props.actions.setPeoplePageFavoritesViewMode(state);
     }
   };
 
@@ -62,11 +67,13 @@ class PeoplePage extends PureComponent {
 
   render() {
     const { data, actions } = this.props;
-    const { peopleData, isFavorites, paginatedData } = data;
+    const { peopleData, relationships, paginatedData } = data;
     const {
       setPeoplePagedisplayType,
       toggleFavoriteHero,
       setObservedItemIndex,
+      getFilmData,
+      getPlanetData,
     } = actions;
 
     const paginationsCount = this.getPaginationsItemsCount();
@@ -74,7 +81,7 @@ class PeoplePage extends PureComponent {
       <div className={`page-wrapper ${this.pageName}`}>
         <PeoplePageHeader
           pageName={this.pageName}
-          isFavorites={isFavorites}
+          isFavorites={peopleData.showFavoritesOnly}
           showFavoriteOnly={this.showFavoriteOnly}
           displayType={peopleData.displayType}
           setPeoplePagedisplayType={setPeoplePagedisplayType}
@@ -83,13 +90,16 @@ class PeoplePage extends PureComponent {
         <PeoplePageContent
           pageName={this.pageName}
           loading={peopleData.loading}
-          isFavorites={isFavorites}
+          isFavorites={peopleData.showFavoritesOnly}
           displayType={peopleData.displayType}
           data={paginatedData}
           favoriteHeroes={peopleData.favoriteHeroes}
           toggleFavoriteHero={toggleFavoriteHero}
           observerIndex={peopleData.observerIndex}
           setObservedItemIndex={setObservedItemIndex}
+          getFilmData={getFilmData}
+          getPlanetData={getPlanetData}
+          relationships={relationships}
         />
         <PeoplePageFooter
           pageName={this.pageName}
@@ -104,9 +114,7 @@ class PeoplePage extends PureComponent {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { pathname } = ownProps.location;
-  const isFavorites = pathname === RouteData.Favorites;
-  const { peopleData } = state;
+  const { peopleData, relationships } = state;
 
   const { people, currentPage, itemsPerPage } = peopleData;
 
@@ -120,7 +128,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     data: {
       peopleData,
-      isFavorites,
+      relationships,
       paginatedData,
     },
   };
@@ -147,6 +155,15 @@ const mapDispatchToProps = (dispatch) => {
       setObservedItemIndex: (index) => {
         dispatch(setObservedItemIndexAction(index));
       },
+      setPeoplePageFavoritesViewMode: (state) => {
+        dispatch(setPeoplePageFavoritesViewModeAction(state));
+      },
+      getFilmData: async (id) => {
+        await dispatch(getFilmDataAction(id));
+      },
+      getPlanetData: async (id) => {
+        await dispatch(getPlanetDataAction(id));
+      },
     },
   };
 };
@@ -158,9 +175,10 @@ const PeoplePageComponent = connect(mapStateToProps, mapDispatchToProps, null, {
   },
   areStatesEqual: (next, prev) => {
     //update page only when peopleData change
-    return !!(
-      !next.peopleData.timeStamp ||
-      next.peopleData.timeStamp === prev.peopleData.timeStamp
+    return (
+      !!next.peopleData.timeStamp &&
+      next.peopleData.timeStamp === prev.peopleData.timeStamp &&
+      next.relationships.timeStamp === prev.relationships.timeStamp
     );
   },
 })(PeoplePage);

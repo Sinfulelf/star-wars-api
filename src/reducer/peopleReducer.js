@@ -9,6 +9,7 @@ const {
   RESET_PEOPLE_DATA,
   CLEAR_PEOPLE_DATA,
   GET_PEOPLE_DATA,
+  SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE,
   TOGGLE_FAVORITE_HEROES,
   SET_OBSERVED_ITEM_INDEX,
 } = PeopleActions;
@@ -95,6 +96,15 @@ export const peopleReducer = handleActions(
         people: updatedPeopleList,
         filterName: search,
         timeStamp: Date.now(),
+      };
+    },
+    [SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE]: (peopleData, { payload }) => {
+      const { state } = payload;
+
+      return {
+        ...peopleData,
+        timeStamp: Date.now(),
+        showFavoritesOnly: state,
       };
     },
     [TOGGLE_FAVORITE_HEROES]: (peopleData, { payload }) => {

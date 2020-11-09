@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
+import { RelationshipsStorePropTypes } from "../../models/storeModels";
+
 import {
   HeroDetailsPropTypes,
   PeoplePageDispaType,
@@ -19,13 +21,15 @@ class Content extends PureComponent {
     const {
       pageName,
       loading,
-      isFavorites,
       data,
       displayType,
       toggleFavoriteHero,
       favoriteHeroes,
       observerIndex,
       setObservedItemIndex,
+      relationships,
+      getFilmData,
+      getPlanetData,
     } = this.props;
 
     return (
@@ -67,18 +71,26 @@ class Content extends PureComponent {
                   animation="scale"
                   duration={400}
                 >
-                  <Segment
-                    className="user-info"
+                  <div
+                    className="full-space"
                     style={{
-                      marginLeft:
+                      paddingLeft:
                         personCardConfig.stylesConfigs[PeoplePageDispaType.list]
                           .width +
                         personCardConfig.stylesConfigs[PeoplePageDispaType.list]
                           .userInfoMargin,
                     }}
                   >
-                    <HeroInfo item={data[observerIndex]} />
-                  </Segment>
+                    <Segment className="user-info">
+                      <HeroInfo
+                        item={data[observerIndex]}
+                        relationships={relationships}
+                        getFilmData={getFilmData}
+                        getPlanetData={getPlanetData}
+                        showFullInfo={displayType === PeoplePageDispaType.list}
+                      />
+                    </Segment>
+                  </div>
                 </Transition>
               )}
             </div>
@@ -92,7 +104,6 @@ class Content extends PureComponent {
 Content.propTypes = {
   pageName: PropTypes.string.isRequired,
   loading: PropTypes.bool.isRequired,
-  isFavorites: PropTypes.bool.isRequired,
   displayType: PropTypes.oneOf([
     PeoplePageDispaType.cards,
     PeoplePageDispaType.list,
@@ -102,6 +113,9 @@ Content.propTypes = {
   favoriteHeroes: PropTypes.arrayOf(PropTypes.number).isRequired,
   toggleFavoriteHero: PropTypes.func.isRequired,
   setObservedItemIndex: PropTypes.func.isRequired,
+  relationships: PropTypes.shape(RelationshipsStorePropTypes).isRequired,
+  getFilmData: PropTypes.func.isRequired,
+  getPlanetData: PropTypes.func.isRequired,
 };
 
 export const PeoplePageContent = Content;

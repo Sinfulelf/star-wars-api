@@ -3,7 +3,6 @@ export const RouteData = {
   Login: "/login",
   People: "/people",
   Hero: "/hero/:id",
-  Favorites: "/favorites",
   Settings: "/settings",
 
   NotExists: '/404'

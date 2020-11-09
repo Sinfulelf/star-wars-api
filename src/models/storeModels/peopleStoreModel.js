@@ -17,8 +17,10 @@ export class PeopleStore {
   favoriteHeroes = [];
 
   itemsPerPage = 10;
+  exFavorite = false;
 
   displayType = PeoplePageDispaType.list;
+  showFavoritesOnly = false;
 }
 
 export const PeopleStorePropTypes = {
@@ -33,5 +35,8 @@ export const PeopleStorePropTypes = {
 
   favoriteHeroes: PT.arrayOf(PT.number),
 
+  exFavorite: PT.bool,
+
   displayType: PT.oneOf([PeoplePageDispaType.list, PeoplePageDispaType.cards]),
+  showFavoritesOnly: PT.bool,
 };

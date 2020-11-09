@@ -1,6 +1,6 @@
 const baseStarWarsAPIUrl = "https://swapi.dev/api";
 
-export const StartWarsUrlData = {
+export const StarWarsUrlData = {
   GET_PEOPLE: `${baseStarWarsAPIUrl}/people/`,
   GET_PLANET: `${baseStarWarsAPIUrl}/planets/`,
   GET_FILM: `${baseStarWarsAPIUrl}/films/`,

@@ -1,5 +1,5 @@
 import { getData } from "../helpers";
-import { StartWarsUrlData } from "../data";
+import { StarWarsUrlData } from "../data";
 import { HeroDetails } from "../models/dataModels";
 
 import {
@@ -14,6 +14,7 @@ export const PeopleActions = {
   RESET_PEOPLE_DATA: "RESET_PEOPLE_DATA",
   CLEAR_PEOPLE_DATA: "CLEAR_PEOPLE_DATA",
   GET_PEOPLE_DATA: "GET_PEOPLE_DATA",
+  SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE: "SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE",
 
   TOGGLE_FAVORITE_HEROES: "TOGGLE_FAVORITE_HEROES",
   SET_OBSERVED_ITEM_INDEX: "SET_OBSERVED_ITEM_INDEX",
@@ -85,7 +86,7 @@ export function getPeopleData(page, search) {
         if (search) query.search = search;
 
         const { count, results } = await getData({
-          baseUrl: StartWarsUrlData.GET_PEOPLE,
+          baseUrl: StarWarsUrlData.GET_PEOPLE,
           query,
         });
         if (results) {
@@ -109,6 +110,36 @@ export function getPeopleData(page, search) {
       }
     } else {
       dispatch(setPeoplePagePaginationPageDispatch(pageStr));
+    }
+  };
+}
+
+const setPeoplePageFavoritesViewModeDispatch = (state) => ({
+  type: PeopleActions.SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE,
+  payload: { state },
+});
+export function setPeoplePageFavoritesViewMode(state) {
+  return (dispatch, getState) => {
+    dispatch(setPeoplePageFavoritesViewModeDispatch(state));
+    if (state) {
+      const { peopleData } = getState();
+      const { people, favoriteHeroes } = peopleData;
+      const existingFavoriteData = [];
+      const favoriteDataToUpload = [];
+
+      for (let i = 0; i < favoriteHeroes.length; i++) {
+        const item = people.find((x) => x && x.id === favoriteHeroes[i]);
+        if (item) {
+          existingFavoriteData.push(item);
+        } else {
+          favoriteDataToUpload.push(i);
+        }
+      }
+
+      console.log(favoriteDataToUpload);
+      console.log(existingFavoriteData);
+    } else {
+      
     }
   };
 }

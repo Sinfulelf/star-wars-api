@@ -28,7 +28,7 @@ export default class App extends PureComponent {
             <Switch>
               <InnerRoute
                 exact
-                path={[RouteData.Base, RouteData.People, RouteData.Favorites]}
+                path={[RouteData.Base, RouteData.People]}
                 component={PeopleListPage}
               />
               <InnerRoute component={PageAreNotExist} />

@@ -28,11 +28,11 @@ export async function getData(urlData, postBody) {
   return data;
 }
 
-function getUrl(urlData) {
+export function getUrl(urlData) {
   const { baseUrl, param, query } = urlData;
   let url = baseUrl;
   if (param) {
-    url += `/${param}`;
+    url += `${param}/`;
   }
   if (query) {
     url += "?" + new URLSearchParams(query).toString();

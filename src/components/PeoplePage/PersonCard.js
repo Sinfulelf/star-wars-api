@@ -47,9 +47,11 @@ class PersonCardItem extends PureComponent {
   }
 
   setCardActiveState = (state) => {
-    this.setState({
-      isActive: state,
-    });
+    const { displayType } = this.props;
+    if (displayType === PeoplePageDispaType.list)
+      this.setState({
+        isActive: state,
+      });
   };
 
   setHeartIconFilled = (state) => {
@@ -81,6 +83,11 @@ class PersonCardItem extends PureComponent {
             : ""
         } ${displayType}`}
         style={style}
+        onClick={() => {
+          if (!isObserved) {
+            setObservedItemIndex(index);
+          }
+        }}
       >
         <div className="hero-card__header">
           <Header
@@ -96,11 +103,6 @@ class PersonCardItem extends PureComponent {
             onMouseDown={(_) => {
               this.setCardActiveState(true);
             }}
-            onClick={() => {
-              if (!isObserved) {
-                setObservedItemIndex(index);
-              }
-            }}
           >
             {item.name}
           </Header>
@@ -111,7 +113,8 @@ class PersonCardItem extends PureComponent {
             }`}
             onMouseEnter={(_) => this.setHeartIconFilled(true)}
             onMouseLeave={(_) => this.setHeartIconFilled(false)}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               toggleFavoriteHero(item.id);
             }}
           />
@@ -120,7 +123,7 @@ class PersonCardItem extends PureComponent {
           )}
         </div>
         {displayType === PeoplePageDispaType.cards && (
-          <HeroInfo item={item} cardView/>
+          <HeroInfo item={item} showFullInfo={false} />
         )}
       </div>
     );

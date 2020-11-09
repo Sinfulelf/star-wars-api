@@ -11,9 +11,9 @@ export const personCardConfig = {
     },
     [PeoplePageDispaType.cards]: {
       width: 250,
-      height: 195,
+      height: 216,
       horizontalGap: 12,
-      verticalGap: 20,
+      verticalGap: 14,
     },
   },
   shouldRecalculateStyle(nextProps, prevState) {

@@ -24,7 +24,6 @@ export class HeroDetails extends IdUrlModel {
   planet = null;
   films = [];
 
-  isFavorit = false;
   fromPage = "";
 
   static new(resultItem) {
@@ -60,6 +59,5 @@ export const HeroDetailsPropTypes = {
   gender: PT.string.isRequired,
   planet: PT.shape(PlanetDetailsPropTypes),
   films: PT.arrayOf(PT.shape(FilmDetailPropTypes)).isRequired,
-  isFavorit: PT.bool.isRequired,
   fromPage: PT.oneOfType([PT.string, PT.number]).isRequired,
 };
