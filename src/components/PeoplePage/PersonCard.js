@@ -84,7 +84,7 @@ class PersonCardItem extends PureComponent {
         } ${displayType}`}
         style={style}
         onClick={() => {
-          if (!isObserved) {
+          if (!isObserved && displayType === PeoplePageDispaType.list) {
             setObservedItemIndex(index);
           }
         }}

@@ -8,11 +8,24 @@ export const RelationshipsActions = {
   GET_PLANET_DATA: "GET_PLANET_DATA",
 };
 
+/**
+ * Actions and events about main data dependency.
+ * @memberof Actions
+ * @namespace Actions.relationshipsActions
+ */
+
 const getFilmDataDispatch = (film) => ({
   type: RelationshipsActions.GET_FILM_DATA,
   payload: { film },
 });
 
+/**
+ * Upload film full info;
+ * @param {number} id film Id
+ * 
+ * @memberof Actions.relationshipsActions
+ * @async
+ */
 export function getFilmData(id) {
   return async (dispatch, getState) => {
     const { relationships } = getState();
@@ -42,6 +55,13 @@ const getPlanetDataDispatch = (planet) => ({
   payload: { planet },
 });
 
+/**
+ * Upload planet full info;
+ * @param {number} id planet Id
+ * 
+ * @memberof Actions.relationshipsActions
+ * @async
+ */
 export function getPlanetData(id) {
   return async (dispatch, getState) => {
     const { relationships } = getState();

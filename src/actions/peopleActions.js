@@ -188,10 +188,11 @@ function getPeopleFavoriteData(page, search) {
       const idsPerPage = Object.keys(favoriteHeroes)
         .map((key) => ({ id: Number(key), name: favoriteHeroes[key] }))
         .filter(
-          (x) => x && (x.name || "").toLowerCase().indexOf(filterName) !== -1
+          (x) =>
+            x &&
+            (x.name || "").toString().toLowerCase().indexOf(filterName) !== -1
         )
         .slice(itemsPerPage * (page - 1), itemsPerPage * page);
-
       if (!idsPerPage.length && page > 1) {
         await dispatch(getPeopleFavoriteData(page - 1, search));
       } else {
