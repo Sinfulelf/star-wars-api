@@ -96,7 +96,6 @@ export async function signInWithGoogleFirebase() {
 
 export function observeFirebaseUser(userExistsCallback, userNotExistsCallback) {
   firebase.auth().onAuthStateChanged((user) => {
-    console.log(123);
     if (user) {
       if (userExistsCallback && typeof userExistsCallback === "function")
         userExistsCallback(user);

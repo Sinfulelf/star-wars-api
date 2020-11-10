@@ -194,8 +194,6 @@ function getPeopleFavoriteData(page, search) {
             (x.name || "").toString().toLowerCase().indexOf(filterName) !== -1
         );
         
-      console.log(123);
-
       const idsPerPage = filteredItems.slice(
         itemsPerPage * (page - 1),
         itemsPerPage * page
