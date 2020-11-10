@@ -45,15 +45,25 @@ export function setUserCookies(userInfo, time = 600_000) {
   if (time) {
     updateCookiesInterval = setInterval(() => {
       document.cookie = `${document.cookie}; expires=${setTimeForCookies(
-        time
+        new Date(time).toGMTString()
       )}`;
     }, time * 0.8);
   }
 }
 
+export function deleteAllCookies() {
+  const cookies = document.cookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+      let temp = cookies[i];
+      const eqPos = temp.indexOf("=");
+      const name = eqPos > -1 ? temp.substr(0, eqPos) : temp;
+      document.cookie = name + "=;expires="+new Date(0).toGMTString();
+  }
+}
+
 function setTimeForCookies(seconds) {
-  var now = new Date();
-  var time = now.getTime();
+  const now = new Date();
+  let time = now.getTime();
 
   time += seconds * 1000;
   now.setTime(time);

@@ -19,6 +19,7 @@ import { RouteData } from "../../data";
 
 import {
   setUserCookies,
+  deleteAllCookies,
   setFirebaseAuthInfo,
   createUserWithFirebase,
   signInWithFormFirebase,
@@ -34,38 +35,54 @@ import RegisterForm from "./RegisterForm";
 const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
-    setUserCookies({}, 0);
+    deleteAllCookies();
     signOutFirebase();
   }, []);
 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
+  //const [singinEr, setFormLoading] = useState(false);
 
   const { authOffline, authOnline } = actions;
   async function createNewUser(email, password) {
+    setFormLoading(true);
     const user = await createUserWithFirebase(email, password);
     if (user) {
       authOnline(user);
       history.push(RouteData.Base);
+    } else {
+      setFormLoading(false);
     }
   }
   async function loginWithForm(email, password) {
+    setFormLoading(true);
     const user = await signInWithFormFirebase(email, password);
     if (user) {
       authOnline(user);
       history.push(RouteData.Base);
+    } else {
+      setFormLoading(false);
     }
   }
   async function loginViaGoogleForm() {
+    setFormLoading(true);
     const user = await signInWithGoogleFirebase();
     if (user) {
       authOnline(user);
       history.push(RouteData.Base);
+    } else {
+      setFormLoading(false);
     }
   }
 
   return (
     <div id="login-screen">
       <Segment>
+      {formLoading && (
+          <Dimmer active inverted className="p-absolute">
+            <Loader inverted size="huge">Loading...</Loader>
+          </Dimmer>
+        )}
         <Header as="h2" icon className="login-header full-width">
           <DeathStarIcon width={45} height={45} />
           <div>Star Wars API</div>
