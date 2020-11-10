@@ -171,7 +171,7 @@ const mapDispatchToProps = (dispatch) => {
         const userName = user.additionalUserInfo.profile.name;
         setUserCookies(JSON.stringify({ userName, offlineMode: false }));
         setFirebaseAuthInfo(user);
-        dispatch(setUserInfoAction(userName, true, user));
+        dispatch(setUserInfoAction(userName, false, user));
       },
     },
   };

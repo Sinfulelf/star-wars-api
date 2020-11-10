@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(
           setUserInfoAction(
             userName,
-            offlineMode && !!user,
+            offlineMode && !user,
             !!user ? user : null
           )
         );

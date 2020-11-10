@@ -124,7 +124,9 @@ export const peopleReducer = handleActions(
         ...peopleData,
         timeStamp: Date.now(),
         showFavoritesOnly: state,
-        people: peopleData.people.filter((x) => x),
+        people: peopleData.people.filter(
+          (x) => x && x.id in peopleData.favoriteHeroes
+        ),
       };
     },
     [TOGGLE_FAVORITE_HEROES]: (peopleData, { payload }) => {
@@ -143,6 +145,9 @@ export const peopleReducer = handleActions(
         ...peopleData,
         timeStamp: Date.now(),
         favoriteHeroes: newFavorites,
+        people: peopleData.showFavoritesOnly
+          ? peopleData.people.filter((x) => x && x.id in newFavorites)
+          : peopleData.people,
       };
     },
     [SET_OBSERVED_ITEM_INDEX]: (peopleData, { payload }) => {
