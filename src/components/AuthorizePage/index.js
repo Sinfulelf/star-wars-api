@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Button,
   Divider,
-  Form,
   Grid,
   Segment,
   Header,
   Icon,
-  Message,
   Popup,
 } from "semantic-ui-react";
 
@@ -21,11 +19,16 @@ import { setUserCookies } from "../../helpers";
 
 import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions";
 
+import SingInForm from "./SingInForm";
+import RegisterForm from "./RegisterForm";
+
 const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
     setUserCookies({}, 0);
   }, []);
+
+  const [showRegisterForm, setShowRegisterForm] = useState(true);
 
   const { authOffline } = actions;
 
@@ -41,36 +44,22 @@ const AuthPage = ({ history, data, actions }) => {
         </Header>
         <Segment className="login-form" placeholder>
           <Grid columns={2} relaxed="very" stackable divided>
-            <Grid.Column>
-              <Form className="firebase-login-form" widths="equal">
-                <Form.Input
-                  icon="user"
-                  iconPosition="left"
-                  label="Username"
-                  placeholder="Username"
-                  disabled
-                />
-                <Form.Input
-                  icon="lock"
-                  iconPosition="left"
-                  label="Password"
-                  type="password"
-                  disabled
-                />
-
-                <Button
-                  content="Login via firebase"
-                  primary
-                  style={{ marginTop: "1.5em", marginBottom: "2.5em" }}
-                  disabled
-                />
-                <Message className="disabled">
-                  First time here?&nbsp;
-                  <Link to="#" style={{ maginLeft: ".3em" }}>
-                    Sing Up now!
-                  </Link>
-                </Message>
-              </Form>
+            <Grid.Column className={`firebase-auth-forms-column ${
+              showRegisterForm ? "register" : "login"
+            }`}>
+              <SingInForm
+                visible={!showRegisterForm}
+                setVisible={() => {
+                  setShowRegisterForm(true);
+                }}
+              />
+              <Divider className="firebase-auth-form-divider"/>
+              <RegisterForm
+                visible={showRegisterForm}
+                setVisible={() => {
+                  setShowRegisterForm(false);
+                }}
+              />
             </Grid.Column>
             <Grid.Column verticalAlign="middle" className="offline-section">
               <Popup

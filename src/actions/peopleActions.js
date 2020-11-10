@@ -185,15 +185,18 @@ function getPeopleFavoriteData(page, search) {
     try {
       dispatch(setPeoplePageLoadingState(true));
       const filterName = (search || "").toLowerCase();
-
-      const idsPerPage = Object.keys(favoriteHeroes)
+      const filteredItems = Object.keys(favoriteHeroes)
         .map((key) => ({ id: Number(key), name: favoriteHeroes[key] }))
         .filter(
           (x) =>
             x &&
             (x.name || "").toString().toLowerCase().indexOf(filterName) !== -1
-        )
-        .slice(itemsPerPage * (page - 1), itemsPerPage * page);
+        );
+
+      const idsPerPage = filteredItems.slice(
+        itemsPerPage * (page - 1),
+        itemsPerPage * page
+      );
       if (!idsPerPage.length && page > 1) {
         await dispatch(getPeopleFavoriteData(page - 1, search));
       } else {
@@ -217,7 +220,7 @@ function getPeopleFavoriteData(page, search) {
         dispatch(
           getPeopleDataDispatch(
             items,
-            Object.keys(favoriteHeroes).length,
+            Object.keys(filteredItems).length,
             page.toString(),
             search
           )

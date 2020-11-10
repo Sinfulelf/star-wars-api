@@ -13,11 +13,53 @@ $login-form-width: 750px;
   justify-content: center;
 
   .login-form {
+    overflow: hidden;
     position: relative;
     width: $login-form-width;
     height: 330px;
     margin-top: 0;
     background: #ffffff;
+
+    .firebase-auth-forms-column {
+      & > * {
+        transition: top 0.45s ease-out;
+      }
+      .back-to-signin {
+        position: absolute;
+        right: 4px;
+        top: -10px;
+        @include hover-active-item;
+      }
+
+      .firebase-auth-form-divider {
+        position: absolute;
+        width: 85%;
+        height: 7%;
+        border-width: 3px;
+      }
+      &.login {
+        .firebase-singin-form {
+          top: 25%;
+        }
+        .firebase-auth-form-divider {
+          top: 76%;
+        }
+        .firebase-register-form {
+          top: 31%;
+        }
+      }
+      &.register {
+        .firebase-singin-form {
+          top: -32%;
+        }
+        .firebase-auth-form-divider {
+          top: 19%;
+        }
+        .firebase-register-form {
+          top: -25%;
+        }
+      }
+    }
 
     .offline-section {
       box-shadow: none;
