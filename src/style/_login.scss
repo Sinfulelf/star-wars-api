@@ -27,7 +27,7 @@ $login-form-width: 750px;
       .back-to-signin {
         position: absolute;
         right: 4px;
-        top: -10px;
+        top: -40px;
         @include hover-active-item;
       }
 
@@ -39,24 +39,24 @@ $login-form-width: 750px;
       }
       &.login {
         .firebase-singin-form {
-          top: 25%;
+          top: 100px;
         }
         .firebase-auth-form-divider {
-          top: 76%;
+          top: 408px;
         }
         .firebase-register-form {
-          top: 31%;
+          top: 190px;
         }
       }
       &.register {
         .firebase-singin-form {
-          top: -32%;
+          top: -230px;
         }
         .firebase-auth-form-divider {
-          top: 19%;
+          top: 72px;
         }
         .firebase-register-form {
-          top: -25%;
+          top: -130px;
         }
       }
     }

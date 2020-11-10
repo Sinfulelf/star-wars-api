@@ -1,3 +1,4 @@
+import firebase from "firebase";
 /**
  * Networks helpers functions;
  * @memberof Helpers
@@ -39,3 +40,15 @@ export function getUrl(urlData) {
   }
   return url;
 }
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDBkOq6daLKKiGA6QTrCscb0JupbVXD5wE",
+  authDomain: "star-wars-api-70c4e.firebaseapp.com",
+  databaseURL: "https://star-wars-api-70c4e.firebaseio.com",
+  projectId: "star-wars-api-70c4e",
+  storageBucket: "star-wars-api-70c4e.appspot.com",
+  messagingSenderId: "864744893293",
+  appId: "1:864744893293:web:bd13512c77c47dd9d14864",
+};
+
+export const firebaseApp = firebase.initializeApp(firebaseConfig);

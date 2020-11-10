@@ -28,7 +28,7 @@ const AuthPage = ({ history, data, actions }) => {
     setUserCookies({}, 0);
   }, []);
 
-  const [showRegisterForm, setShowRegisterForm] = useState(true);
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
 
   const { authOffline } = actions;
 
