@@ -144,6 +144,7 @@ const toggleFavoritesHeroesDispatch = (items) => ({
 export function toggleFavoritesHeroes(items) {
   return async (dispatch, getState) => {
     dispatch(toggleFavoritesHeroesDispatch(items));
+
     const { userInfo, peopleData } = getState();
     if (userInfo.offlineMode) {
       setFavoritesHeroesToStorage(peopleData.favoriteHeroes);
@@ -213,7 +214,6 @@ function getPeopleFavoriteData(page, search) {
           }
         }
 
-        dispatch(resetPeopleDataDispatch());
         dispatch(
           getPeopleDataDispatch(
             items,

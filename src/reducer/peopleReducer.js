@@ -63,7 +63,9 @@ export const peopleReducer = handleActions(
     [GET_PEOPLE_DATA]: (peopleData, { payload }) => {
       const { data, count, page, search } = payload;
 
-      const newUploadedPages = [...peopleData.uploadedPages, page];
+      const newUploadedPages = [
+        ...new Set([...peopleData.uploadedPages, page]),
+      ];
 
       const clearUploadedPages = newUploadedPages.length > 3;
 
@@ -122,6 +124,7 @@ export const peopleReducer = handleActions(
         ...peopleData,
         timeStamp: Date.now(),
         showFavoritesOnly: state,
+        people: peopleData.people.filter((x) => x),
       };
     },
     [TOGGLE_FAVORITE_HEROES]: (peopleData, { payload }) => {
