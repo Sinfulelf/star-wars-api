@@ -1,6 +1,9 @@
 import { observeFirebaseUser } from "../helpers";
 
+import { getFavoriteHeroes } from "./peopleActions";
+
 export const UserInfoActions = {
+  CLEAR_USER_INFO: "CLEAR_USER_INFO",
   SET_USER_INFO: "SET_USER_INFO",
   GET_AUTHORIZED_ONLINE_USER_DATA: "GET_AUTHORIZED_ONLINE_USER_DATA",
 };
@@ -10,6 +13,15 @@ export const UserInfoActions = {
  * @memberof Actions
  * @namespace Actions.userInfoActions
  */
+
+const clearUserInfoDispatch = () => ({
+  type: UserInfoActions.CLEAR_USER_INFO,
+});
+export function clearUserInfo() {
+  return (dispatch) => {
+    dispatch(clearUserInfoDispatch());
+  };
+}
 
 const setUserInfoDispatch = (userName, offlineMode) => ({
   type: UserInfoActions.SET_USER_INFO,
@@ -40,6 +52,7 @@ export function getAuthorizedOnlineUser(reloginCallBack) {
       (user) => {
         if (!getState().userInfo.user) {
           dispatch(getAuthorizedOnlineUserDispatch(user));
+          dispatch(getFavoriteHeroes());
         }
       },
       () => reloginCallBack()

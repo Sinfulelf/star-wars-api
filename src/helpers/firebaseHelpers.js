@@ -1,9 +1,6 @@
-import dotenv from "dotenv";
+
 import firebase from "firebase";
-
 import { validateForm } from ".";
-
-dotenv.config({ path: "../../" });
 
 const getFirebaseConfig = () => ({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -16,6 +13,8 @@ const getFirebaseConfig = () => ({
 });
 
 firebase.initializeApp(getFirebaseConfig());
+
+export const firebaseDb = firebase.database();
 
 export async function createUserWithFirebase(email, password) {
   try {

@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import { Route, Redirect, Switch } from "react-router";
 import { Provider } from "react-redux";
+import dotenv from "dotenv";
 
 import "./style/index.scss";
 import "semantic-ui-css/semantic.min.css";
@@ -17,6 +18,8 @@ import PageAreNotExist from "./components/InfoPages/PageAreNotExists";
 
 import AuthPage from "./components/AuthorizePage";
 import PeopleListPage from "./components/PeoplePage";
+
+dotenv.config({ path: "../" });
 
 export default class App extends PureComponent {
   render() {

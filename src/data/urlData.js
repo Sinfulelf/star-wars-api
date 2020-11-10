@@ -1,4 +1,4 @@
-const baseStarWarsAPIUrl = "https://swapi.dev/api";
+const baseStarWarsAPIUrl = process.env.REACT_APP_STARWARS_API_URL;
 
 export const StarWarsUrlData = {
   GET_PEOPLE: `${baseStarWarsAPIUrl}/people/`,

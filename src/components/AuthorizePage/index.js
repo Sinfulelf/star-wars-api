@@ -26,7 +26,11 @@ import {
   signOutFirebase,
 } from "../../helpers";
 
-import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions";
+import {
+  clearUserInfo as clearUserInfoAction,
+  setUserInfo as setUserInfoAction,
+  getAuthorizedOnlineUser as getAuthorizedOnlineUserAction,
+} from "../../actions/userInfoActions";
 
 import SingInForm from "./SingInForm";
 import RegisterForm from "./RegisterForm";
@@ -39,9 +43,10 @@ function getCapitalizedEmailStart(email) {
 const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
+    actions.clearUserInfo();
     deleteAllCookies();
     signOutFirebase();
-  }, []);
+  }, [actions]);
 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
@@ -52,6 +57,12 @@ const AuthPage = ({ history, data, actions }) => {
   const removeRegistrationErrorState = () => setRegistrationErrorState(false);
 
   const { authOffline, authOnline } = actions;
+
+  const getPath = () => history.location.pathname;
+  const logout = () => {
+    if (getPath() !== RouteData.Login) history.push(RouteData.Login);
+  };
+
   async function createNewUser(email, password) {
     setFormLoading(true);
 
@@ -60,7 +71,7 @@ const AuthPage = ({ history, data, actions }) => {
 
     setFormLoading(false);
     if (user) {
-      authOnline(user);
+      authOnline(user, logout);
       history.push(RouteData.Base);
     } else {
       setRegistrationErrorState(true);
@@ -74,7 +85,7 @@ const AuthPage = ({ history, data, actions }) => {
 
     setFormLoading(false);
     if (user) {
-      authOnline(user);
+      authOnline(user, logout);
       history.push(RouteData.Base);
     } else {
       setSingInErrorState(true);
@@ -85,7 +96,7 @@ const AuthPage = ({ history, data, actions }) => {
     const user = await signInWithGoogleFirebase();
     setFormLoading(false);
     if (user) {
-      authOnline(user);
+      authOnline(user, logout);
       history.push(RouteData.Base);
     }
   }
@@ -183,15 +194,19 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
+      clearUserInfo: () => {
+        dispatch(clearUserInfoAction());
+      },
       authOffline: () => {
         const userName = "Anonymous";
         setUserCookies(JSON.stringify({ userName, offlineMode: true }));
         dispatch(setUserInfoAction(userName, true));
       },
-      authOnline: (user) => {
+      authOnline: (user, logout) => {
         const userName = user.user.displayName || user.user.cutomDisplayName;
         setUserCookies(JSON.stringify({ userName, offlineMode: false }));
         dispatch(setUserInfoAction(userName, false));
+        dispatch(getAuthorizedOnlineUserAction(logout));
       },
     },
   };

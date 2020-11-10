@@ -19,12 +19,10 @@ export class Layout extends PureComponent {
   componentDidMount() {
     const { history, data, actions } = this.props;
     if (!data.userInfo.userName) {
-      setTimeout(() => {
-        const getPath = () => history.location.pathname;
-        actions.getUserInfoDataFromStorages(() => {
-          if (getPath() !== RouteData.Login) history.push(RouteData.Login);
-        });
-      }, 1);
+      const getPath = () => history.location.pathname;
+      actions.getUserInfoDataFromStorages(() => {
+        if (getPath() !== RouteData.Login) history.push(RouteData.Login);
+      });
     }
   }
 
@@ -51,7 +49,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
-      getUserInfoDataFromStorages: (logout) => {
+      getUserInfoDataFromStorages: async (logout) => {
         const { userName, offlineMode } = getUserInfoFromCookie();
         dispatch(setUserInfoAction(userName, offlineMode));
         if (!offlineMode) {

@@ -3,6 +3,7 @@ import { StarWarsUrlData } from "../data";
 import { HeroDetails } from "../models/dataModels";
 
 import {
+  firebaseDb,
   getFavoritesHeroesFromStorage,
   setFavoritesHeroesToStorage,
 } from "../helpers";
@@ -144,17 +145,27 @@ const toggleFavoritesHeroesDispatch = (items) => ({
 export function toggleFavoritesHeroes(items) {
   return async (dispatch, getState) => {
     dispatch(toggleFavoritesHeroesDispatch(items));
-
+    console.log(123);
     const { userInfo, peopleData } = getState();
     if (userInfo.offlineMode) {
       setFavoritesHeroesToStorage(peopleData.favoriteHeroes);
     } else {
-      //todo
-
+      const { user } = userInfo;
+      if (user && user.uid) {
+        try {
+          firebaseDb
+            .ref(user.uid)
+            .set(JSON.stringify(peopleData.favoriteHeroes));
+        } catch (ex) {
+          console.log(ex);
+        }
+      }
     }
     if (peopleData.showFavoritesOnly) {
-      const { currentPage, filterName } = peopleData;
-      await dispatch(getPeopleFavoriteData(currentPage, filterName));
+      setTimeout(() => {
+        const { currentPage, filterName } = peopleData;
+        dispatch(getPeopleFavoriteData(currentPage, filterName));
+      });
     }
   };
 }
@@ -164,6 +175,18 @@ export function getFavoriteHeroes() {
     const { userInfo } = getState();
     if (userInfo.offlineMode) {
       dispatch(toggleFavoritesHeroesDispatch(getFavoritesHeroesFromStorage()));
+    } else {
+      const { user } = userInfo;
+      if (user && user.uid) {
+        try {
+          const value = await firebaseDb.ref(user.uid).once('value');
+          if(value && value.val) {
+            dispatch(toggleFavoritesHeroesDispatch(JSON.parse(value.val())));
+          }
+        } catch (ex) {
+          console.log(ex);
+        }
+      }
     }
   };
 }
@@ -193,7 +216,7 @@ function getPeopleFavoriteData(page, search) {
             x &&
             (x.name || "").toString().toLowerCase().indexOf(filterName) !== -1
         );
-        
+
       const idsPerPage = filteredItems.slice(
         itemsPerPage * (page - 1),
         itemsPerPage * page
