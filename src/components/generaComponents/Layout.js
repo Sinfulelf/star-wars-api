@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 
-import { getUserInfoFromCookie } from "../../helpers";
+import { getUserInfoFromCookie, getFirebaseUserInfo } from "../../helpers";
 
 import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions";
 
@@ -43,8 +43,16 @@ const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
       getUserInfoDataFromStorages: () => {
-        const userInfo = getUserInfoFromCookie();
-        dispatch(setUserInfoAction(userInfo.userName, userInfo.offlineMode));
+        const { userName, offlineMode } = getUserInfoFromCookie();
+        let user = offlineMode ? null : getFirebaseUserInfo();
+
+        dispatch(
+          setUserInfoAction(
+            userName,
+            offlineMode && !!user,
+            !!user ? user : null
+          )
+        );
       },
     },
   };

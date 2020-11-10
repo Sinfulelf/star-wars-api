@@ -3,7 +3,7 @@ import { StarWarsUrlData } from "../data";
 import { HeroDetails } from "../models/dataModels";
 
 import {
-  getFavoritesHeroesToStorage,
+  getFavoritesHeroesFromStorage,
   setFavoritesHeroesToStorage,
 } from "../helpers";
 
@@ -162,7 +162,7 @@ export function getFavoriteHeroes() {
   return async (dispatch, getState) => {
     const { userInfo } = getState();
     if (userInfo.offlineMode) {
-      dispatch(toggleFavoritesHeroesDispatch(getFavoritesHeroesToStorage()));
+      dispatch(toggleFavoritesHeroesDispatch(getFavoritesHeroesFromStorage()));
     }
   };
 }

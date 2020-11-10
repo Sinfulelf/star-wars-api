@@ -20,6 +20,12 @@ $login-form-width: 750px;
     margin-top: 0;
     background: #ffffff;
 
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     .firebase-auth-forms-column {
       & > * {
         transition: top 0.45s ease-out;
@@ -27,7 +33,7 @@ $login-form-width: 750px;
       .back-to-signin {
         position: absolute;
         right: 4px;
-        top: -40px;
+        top: -15px;
         @include hover-active-item;
       }
 
@@ -39,13 +45,13 @@ $login-form-width: 750px;
       }
       &.login {
         .firebase-singin-form {
-          top: 100px;
+          top: 140px;
         }
         .firebase-auth-form-divider {
-          top: 408px;
+          top: 450px;
         }
         .firebase-register-form {
-          top: 190px;
+          top: 230px;
         }
       }
       &.register {
@@ -53,7 +59,7 @@ $login-form-width: 750px;
           top: -230px;
         }
         .firebase-auth-form-divider {
-          top: 72px;
+          top: 77px;
         }
         .firebase-register-form {
           top: -130px;

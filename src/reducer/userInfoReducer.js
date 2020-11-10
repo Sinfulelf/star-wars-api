@@ -8,13 +8,14 @@ export const initialState = new UserInfoStore();
 
 export const userInfoReducer = handleActions(
   {
-    [SET_USER_INFO]: (userInfo, { payload }) => {
-      const { userName, offlineMode } = payload;
+    [SET_USER_INFO]: (userData, { payload }) => {
+      const { userName, offlineMode, userInfo } = payload;
       return {
-        ...userInfo,
+        ...userData,
         timeStamp: Date.now(),
         userName,
-        offlineMode
+        offlineMode,
+        userInfo
       };
     },
   },

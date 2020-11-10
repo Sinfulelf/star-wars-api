@@ -3,8 +3,16 @@ import PT from "prop-types";
 
 import { Form, Button, Icon } from "semantic-ui-react";
 
-const RegisterForm = ({ visible, setVisible }) => (
-  <Form className="firebase-register-form" widths="equal">
+const RegisterForm = ({ visible, setVisible, create }) => (
+  <Form
+    className="firebase-register-form"
+    widths="equal"
+    onSubmit={async ({ target }) => {
+      const emailEl = target.querySelector("#create-email");
+      const passwordEl = target.querySelector("#create-password");
+      await create((emailEl || {}).value, (passwordEl || {}).value);
+    }}
+  >
     <Icon
       name={visible ? "angle up" : "minus"}
       className="back-to-signin"
@@ -13,16 +21,27 @@ const RegisterForm = ({ visible, setVisible }) => (
       onClick={setVisible}
     />
     <Form.Input
+      icon="at"
+      iconPosition="left"
+      label="Email"
+      id="create-email"
+      placeholder="Enter email"
+    />
+    <Form.Input
+      disabled
       icon="user"
       iconPosition="left"
       label="Username"
-      placeholder="Enter username"
+      id="create-username"
+      placeholder="Username"
     />
     <Form.Input
       icon="lock"
       iconPosition="left"
       label="Password"
       type="Enter password"
+      id="create-password"
+      placeholder="Password"
     />
 
     <Button
@@ -33,6 +52,10 @@ const RegisterForm = ({ visible, setVisible }) => (
   </Form>
 );
 
-RegisterForm.propTypes = {};
+RegisterForm.propTypes = {
+  visible: PT.bool.isRequired,
+  setVisible: PT.func.isRequired,
+  create: PT.func.isRequired,
+};
 
 export default RegisterForm;

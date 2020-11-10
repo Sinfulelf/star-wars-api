@@ -9,13 +9,22 @@ import {
   Header,
   Icon,
   Popup,
+  Dimmer,
+  Loader,
 } from "semantic-ui-react";
 
 import { DeathStarIcon } from "../helpersComponents/Icons";
 
 import { RouteData } from "../../data";
 
-import { setUserCookies } from "../../helpers";
+import {
+  setUserCookies,
+  setFirebaseAuthInfo,
+  createUserWithFirebase,
+  signInWithFormFirebase,
+  signInWithGoogleFirebase,
+  signOutFirebase,
+} from "../../helpers";
 
 import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions";
 
@@ -26,11 +35,33 @@ const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
     setUserCookies({}, 0);
+    signOutFirebase();
   }, []);
 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
 
-  const { authOffline } = actions;
+  const { authOffline, authOnline } = actions;
+  async function createNewUser(email, password) {
+    const user = await createUserWithFirebase(email, password);
+    if (user) {
+      authOnline(user);
+      history.push(RouteData.Base);
+    }
+  }
+  async function loginWithForm(email, password) {
+    const user = await signInWithFormFirebase(email, password);
+    if (user) {
+      authOnline(user);
+      history.push(RouteData.Base);
+    }
+  }
+  async function loginViaGoogleForm() {
+    const user = await signInWithGoogleFirebase();
+    if (user) {
+      authOnline(user);
+      history.push(RouteData.Base);
+    }
+  }
 
   return (
     <div id="login-screen">
@@ -44,21 +75,26 @@ const AuthPage = ({ history, data, actions }) => {
         </Header>
         <Segment className="login-form" placeholder>
           <Grid columns={2} relaxed="very" stackable divided>
-            <Grid.Column className={`firebase-auth-forms-column ${
-              showRegisterForm ? "register" : "login"
-            }`}>
+            <Grid.Column
+              className={`firebase-auth-forms-column ${
+                showRegisterForm ? "register" : "login"
+              }`}
+            >
               <SingInForm
                 visible={!showRegisterForm}
                 setVisible={() => {
                   setShowRegisterForm(true);
                 }}
+                loginWithForm={loginWithForm}
+                loginViaGoogleForm={loginViaGoogleForm}
               />
-              <Divider className="firebase-auth-form-divider"/>
+              <Divider className="firebase-auth-form-divider" />
               <RegisterForm
                 visible={showRegisterForm}
                 setVisible={() => {
                   setShowRegisterForm(false);
                 }}
+                create={createNewUser}
               />
             </Grid.Column>
             <Grid.Column verticalAlign="middle" className="offline-section">
@@ -112,7 +148,13 @@ const mapDispatchToProps = (dispatch) => {
       authOffline: () => {
         const userName = "Anonymous";
         setUserCookies(JSON.stringify({ userName, offlineMode: true }));
-        dispatch(setUserInfoAction(userName, true));
+        dispatch(setUserInfoAction(userName, true, null));
+      },
+      authOnline: (user) => {
+        const userName = user.additionalUserInfo.profile.name;
+        setUserCookies(JSON.stringify({ userName, offlineMode: false }));
+        setFirebaseAuthInfo(user);
+        dispatch(setUserInfoAction(userName, true, user));
       },
     },
   };

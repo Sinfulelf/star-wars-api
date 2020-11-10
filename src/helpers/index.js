@@ -6,3 +6,4 @@
 export * from "./cookiesHelpers";
 export * from "./httpHelpers";
 export * from "./storageHelpers";
+export * from "./validationHelper";

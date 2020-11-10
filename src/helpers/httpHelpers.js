@@ -1,4 +1,6 @@
 import firebase from "firebase";
+
+import { validateForm } from ".";
 /**
  * Networks helpers functions;
  * @memberof Helpers
@@ -52,3 +54,44 @@ const firebaseConfig = {
 };
 
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+export async function createUserWithFirebase(email, password) {
+  try {
+    if (validateForm(email, password)) {
+      return await firebaseApp
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+    } else {
+      throw Error("incorrect form");
+    }
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function signInWithFormFirebase(email, password) {
+  try {
+    if (validateForm(email, password)) {
+      return await firebaseApp
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+    } else {
+      throw Error("incorrect form");
+    }
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function signInWithGoogleFirebase() {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    return await firebase.auth().signInWithPopup(provider);
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+
+export async function signOutFirebase() {
+  await firebase.auth().signOut();
+}
