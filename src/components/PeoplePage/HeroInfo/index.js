@@ -17,11 +17,12 @@ class HeroInfoItem extends PureComponent {
 
   async componentDidUpdate(prevProps) {
     const { item, showFullInfo } = this.props;
+
     if (
       item.id !== prevProps.item.id ||
       showFullInfo !== prevProps.showFullInfo ||
-      (!prevProps.planet && item.planet) ||
-      (prevProps.films && prevProps.films.length !== item.films.length)
+      (!prevProps.item?.planet && item.planet) ||
+      (prevProps.item?.films && prevProps.item?.films.length !== item.films.length)
     ) {
       await this.uploadHeroAdditionalData();
     }

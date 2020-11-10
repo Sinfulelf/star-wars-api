@@ -58,9 +58,9 @@ export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export async function createUserWithFirebase(email, password) {
   try {
     if (validateForm(email, password)) {
-      return await firebaseApp
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const auth = firebase.auth();
+      await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      return await auth.createUserWithEmailAndPassword(email, password);
     } else {
       throw Error("incorrect form");
     }
@@ -72,9 +72,9 @@ export async function createUserWithFirebase(email, password) {
 export async function signInWithFormFirebase(email, password) {
   try {
     if (validateForm(email, password)) {
-      return await firebaseApp
-        .auth()
-        .signInWithEmailAndPassword(email, password);
+      const auth = firebase.auth();
+      await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      return await auth.signInWithEmailAndPassword(email, password);
     } else {
       throw Error("incorrect form");
     }
@@ -86,10 +86,25 @@ export async function signInWithFormFirebase(email, password) {
 export async function signInWithGoogleFirebase() {
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    return await firebase.auth().signInWithPopup(provider);
+    const auth = firebase.auth();
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    return await auth.signInWithPopup(provider);
   } catch (ex) {
     console.log(ex);
   }
+}
+
+export function observeFirebaseUser(userExistsCallback, userNotExistsCallback) {
+  firebase.auth().onAuthStateChanged((user) => {
+    console.log(123);
+    if (user) {
+      if (userExistsCallback && typeof userExistsCallback === "function")
+        userExistsCallback(user);
+    } else {
+      if (userNotExistsCallback && typeof userNotExistsCallback === "function")
+        userNotExistsCallback();
+    }
+  });
 }
 
 export async function signOutFirebase() {

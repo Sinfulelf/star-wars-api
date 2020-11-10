@@ -1,7 +1,5 @@
 import { UserInfoStore } from "../models/storeModels";
 
-import { clearFirebaseAuthInfo } from ".";
-
 /**
  * Coockies helpers functions;
  * @memberof Helpers
@@ -16,9 +14,6 @@ import { clearFirebaseAuthInfo } from ".";
  */
 export function checkCookiesOnExists() {
   const cookie = !!document.cookie;
-  if (!cookie) {
-    clearFirebaseAuthInfo();
-  }
   return cookie;
 }
 

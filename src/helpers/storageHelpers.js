@@ -29,34 +29,3 @@ export function getFavoritesHeroesFromStorage() {
 export function setFavoritesHeroesToStorage(items) {
   localStorage.setItem(favoritesHeroesKey, JSON.stringify(items));
 }
-
-const userInfoFirebase = "star-wars-api-user-info";
-/**
- * Set firebase auth user to localstorage;
- * @param {Object} userInfo firebase auth user
- * 
- * @memberof Helpers.storageHelpers
- */
-export function setFirebaseAuthInfo(userInfo) {
-  localStorage.setItem(userInfoFirebase, JSON.stringify(userInfo));
-}
-/**
- * Get firebase auth info from localstorage;
- * 
- * @returns {Object} firebase auth info
- * 
- * @memberof Helpers.storageHelpers
- */
-export function getFirebaseUserInfo() {
-  const data = localStorage.getItem(userInfoFirebase);
-  if (data) {
-    return JSON.parse(data);
-  }
-  return null;
-}
-/**
- * Remove irebase auth info from localstorage;
- */
-export function clearFirebaseAuthInfo() {
-  localStorage.removeItem(userInfoFirebase);
-}

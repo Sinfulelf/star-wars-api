@@ -1,9 +1,15 @@
 import React, { PureComponent } from "react";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { getUserInfoFromCookie, getFirebaseUserInfo } from "../../helpers";
+import { RouteData } from "../../data";
 
-import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions";
+import { getUserInfoFromCookie } from "../../helpers";
+
+import {
+  setUserInfo as setUserInfoAction,
+  getAuthorizedOnlineUser as getAuthorizedOnlineUserAction,
+} from "../../actions/userInfoActions";
 
 import { Divider } from "semantic-ui-react";
 
@@ -11,10 +17,13 @@ import NavigationBar from "./NavigationBar";
 
 export class Layout extends PureComponent {
   componentDidMount() {
-    const { data, actions } = this.props;
+    const { history, data, actions } = this.props;
     if (!data.userInfo.userName) {
       setTimeout(() => {
-        actions.getUserInfoDataFromStorages();
+        const getPath = () => history.location.pathname;
+        actions.getUserInfoDataFromStorages(() => {
+          if (getPath() !== RouteData.Login) history.push(RouteData.Login);
+        });
       }, 1);
     }
   }
@@ -42,22 +51,19 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
-      getUserInfoDataFromStorages: () => {
+      getUserInfoDataFromStorages: (logout) => {
         const { userName, offlineMode } = getUserInfoFromCookie();
-        let user = offlineMode ? null : getFirebaseUserInfo();
-
-        dispatch(
-          setUserInfoAction(
-            userName,
-            offlineMode && !user,
-            !!user ? user : null
-          )
-        );
+        dispatch(setUserInfoAction(userName, offlineMode));
+        if (!offlineMode) {
+          dispatch(getAuthorizedOnlineUserAction(logout));
+        }
       },
     },
   };
 };
 
-const LayoutComponent = connect(mapStateToProps, mapDispatchToProps)(Layout);
+const LayoutComponent = withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Layout)
+);
 
 export default LayoutComponent;

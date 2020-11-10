@@ -3,7 +3,7 @@ import PT from "prop-types";
 
 import { Form, Button, Icon } from "semantic-ui-react";
 
-const RegisterForm = ({ visible, setVisible, create }) => (
+const RegisterForm = ({ visible, setVisible, create, error, removeErrorState }) => (
   <Form
     className="firebase-register-form"
     widths="equal"
@@ -26,6 +26,8 @@ const RegisterForm = ({ visible, setVisible, create }) => (
       label="Email"
       id="create-email"
       placeholder="Enter email"
+      error={error}
+      onChange={removeErrorState}
     />
     <Form.Input
       disabled
@@ -34,14 +36,17 @@ const RegisterForm = ({ visible, setVisible, create }) => (
       label="Username"
       id="create-username"
       placeholder="Username"
+      error={error}
     />
     <Form.Input
       icon="lock"
       iconPosition="left"
       label="Password"
-      type="Enter password"
+      type="password"
       id="create-password"
-      placeholder="Password"
+      placeholder="Enter password"
+      error={error}
+      onChange={removeErrorState}
     />
 
     <Button
@@ -56,6 +61,8 @@ RegisterForm.propTypes = {
   visible: PT.bool.isRequired,
   setVisible: PT.func.isRequired,
   create: PT.func.isRequired,
+  error: PT.bool.isRequired,
+  removeErrorState: PT.func.isRequired,
 };
 
 export default RegisterForm;

@@ -20,7 +20,6 @@ import { RouteData } from "../../data";
 import {
   setUserCookies,
   deleteAllCookies,
-  setFirebaseAuthInfo,
   createUserWithFirebase,
   signInWithFormFirebase,
   signInWithGoogleFirebase,
@@ -32,6 +31,11 @@ import { setUserInfo as setUserInfoAction } from "../../actions/userInfoActions"
 import SingInForm from "./SingInForm";
 import RegisterForm from "./RegisterForm";
 
+function getCapitalizedEmailStart(email) {
+  const emailStart = (email.split("@") || [])[0] || "None";
+  return emailStart.charAt(0).toUpperCase() + emailStart.slice(1);
+}
+
 const AuthPage = ({ history, data, actions }) => {
   useEffect(() => {
     // on component mount only
@@ -41,46 +45,59 @@ const AuthPage = ({ history, data, actions }) => {
 
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
-  //const [singinEr, setFormLoading] = useState(false);
+  const [singInErrorState, setSingInErrorState] = useState(false);
+  const [registrationErrorState, setRegistrationErrorState] = useState(false);
+
+  const removeSingInErrorState = () => setSingInErrorState(false);
+  const removeRegistrationErrorState = () => setRegistrationErrorState(false);
 
   const { authOffline, authOnline } = actions;
   async function createNewUser(email, password) {
     setFormLoading(true);
+
     const user = await createUserWithFirebase(email, password);
+    user.user.cutomDisplayName = getCapitalizedEmailStart(email);
+
+    setFormLoading(false);
     if (user) {
       authOnline(user);
       history.push(RouteData.Base);
     } else {
-      setFormLoading(false);
+      setRegistrationErrorState(true);
     }
   }
   async function loginWithForm(email, password) {
     setFormLoading(true);
+
     const user = await signInWithFormFirebase(email, password);
+    user.user.cutomDisplayName = getCapitalizedEmailStart(email);
+
+    setFormLoading(false);
     if (user) {
       authOnline(user);
       history.push(RouteData.Base);
     } else {
-      setFormLoading(false);
+      setSingInErrorState(true);
     }
   }
   async function loginViaGoogleForm() {
     setFormLoading(true);
     const user = await signInWithGoogleFirebase();
+    setFormLoading(false);
     if (user) {
       authOnline(user);
       history.push(RouteData.Base);
-    } else {
-      setFormLoading(false);
     }
   }
 
   return (
     <div id="login-screen">
       <Segment>
-      {formLoading && (
+        {formLoading && (
           <Dimmer active inverted className="p-absolute">
-            <Loader inverted size="huge">Loading...</Loader>
+            <Loader inverted size="huge">
+              Loading...
+            </Loader>
           </Dimmer>
         )}
         <Header as="h2" icon className="login-header full-width">
@@ -104,6 +121,8 @@ const AuthPage = ({ history, data, actions }) => {
                 }}
                 loginWithForm={loginWithForm}
                 loginViaGoogleForm={loginViaGoogleForm}
+                error={singInErrorState}
+                removeErrorState={removeSingInErrorState}
               />
               <Divider className="firebase-auth-form-divider" />
               <RegisterForm
@@ -112,6 +131,8 @@ const AuthPage = ({ history, data, actions }) => {
                   setShowRegisterForm(false);
                 }}
                 create={createNewUser}
+                error={registrationErrorState}
+                removeErrorState={removeRegistrationErrorState}
               />
             </Grid.Column>
             <Grid.Column verticalAlign="middle" className="offline-section">
@@ -165,13 +186,12 @@ const mapDispatchToProps = (dispatch) => {
       authOffline: () => {
         const userName = "Anonymous";
         setUserCookies(JSON.stringify({ userName, offlineMode: true }));
-        dispatch(setUserInfoAction(userName, true, null));
+        dispatch(setUserInfoAction(userName, true));
       },
       authOnline: (user) => {
-        const userName = user.additionalUserInfo.profile.name;
+        const userName = user.user.displayName || user.user.cutomDisplayName;
         setUserCookies(JSON.stringify({ userName, offlineMode: false }));
-        setFirebaseAuthInfo(user);
-        dispatch(setUserInfoAction(userName, false, user));
+        dispatch(setUserInfoAction(userName, false));
       },
     },
   };

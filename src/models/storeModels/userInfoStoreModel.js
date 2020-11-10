@@ -5,12 +5,12 @@ export class UserInfoStore {
 
   userName = "";
   offlineMode = true;
-  userInfo = null;
+  user = null;
 }
 
 export const UserInfoStorePropTypes = {
   timeStamp: PT.number,
   userName: PT.string,
   offlineMode: PT.bool,
-  userInfo: PT.object,
+  userId: PT.object,
 };

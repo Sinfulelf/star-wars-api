@@ -150,6 +150,7 @@ export function toggleFavoritesHeroes(items) {
       setFavoritesHeroesToStorage(peopleData.favoriteHeroes);
     } else {
       //todo
+
     }
     if (peopleData.showFavoritesOnly) {
       const { currentPage, filterName } = peopleData;
