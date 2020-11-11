@@ -64,40 +64,51 @@ const AuthPage = ({ history, data, actions }) => {
   };
 
   async function createNewUser(email, password) {
-    setFormLoading(true);
+    try {
+      setFormLoading(true);
 
-    const user = await createUserWithFirebase(email, password);
-    user.user.cutomDisplayName = getCapitalizedEmailStart(email);
+      const user = await createUserWithFirebase(email, password);
+      user.user.cutomDisplayName = getCapitalizedEmailStart(email);
 
-    setFormLoading(false);
-    if (user) {
-      authOnline(user, logout);
-      history.push(RouteData.Base);
-    } else {
-      setRegistrationErrorState(true);
+      if (user) {
+        authOnline(user, logout);
+        history.push(RouteData.Base);
+      } else {
+        setRegistrationErrorState(true);
+      }
+    } catch (ex) {
+      setFormLoading(false);
     }
   }
   async function loginWithForm(email, password) {
-    setFormLoading(true);
+    try {
+      setFormLoading(true);
 
-    const user = await signInWithFormFirebase(email, password);
-    user.user.cutomDisplayName = getCapitalizedEmailStart(email);
+      const user = await signInWithFormFirebase(email, password);
+      user.user.cutomDisplayName = getCapitalizedEmailStart(email);
 
-    setFormLoading(false);
-    if (user) {
-      authOnline(user, logout);
-      history.push(RouteData.Base);
-    } else {
-      setSingInErrorState(true);
+      setFormLoading(false);
+      if (user) {
+        authOnline(user, logout);
+        history.push(RouteData.Base);
+      } else {
+        setSingInErrorState(true);
+      }
+    } catch (ex) {
+      setFormLoading(false);
     }
   }
   async function loginViaGoogleForm() {
-    setFormLoading(true);
-    const user = await signInWithGoogleFirebase();
-    setFormLoading(false);
-    if (user) {
-      authOnline(user, logout);
-      history.push(RouteData.Base);
+    try {
+      setFormLoading(true);
+      const user = await signInWithGoogleFirebase();
+      setFormLoading(false);
+      if (user) {
+        authOnline(user, logout);
+        history.push(RouteData.Base);
+      }
+    } catch (ex) {
+      setFormLoading(false);
     }
   }
 
