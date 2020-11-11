@@ -19,6 +19,8 @@ export class PeopleStore {
   itemsPerPage = 10;
   exFavorite = false;
 
+  selectedCardId = null;
+
   displayType = PeoplePageDispaType.list;
   showFavoritesOnly = false;
 }
@@ -39,4 +41,6 @@ export const PeopleStorePropTypes = {
 
   displayType: PT.oneOf([PeoplePageDispaType.list, PeoplePageDispaType.cards]),
   showFavoritesOnly: PT.bool,
+
+  selectedCardId: PT.number,
 };

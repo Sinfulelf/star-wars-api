@@ -18,6 +18,8 @@ export const PeopleActions = {
   UPDATE_HERO_DATA: "UPDATE_HERO_DATA",
   SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE: "SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE",
 
+  SET_SELECTED_CARD_ITEM: "SET_SELECTED_CARD_ITEM",
+
   TOGGLE_FAVORITE_HEROES: "TOGGLE_FAVORITE_HEROES",
   SET_OBSERVED_ITEM_INDEX: "SET_OBSERVED_ITEM_INDEX",
 };
@@ -169,26 +171,46 @@ export function toggleFavoritesHeroes(items) {
   };
 }
 
+const setSelectedCardItemDispatch = (id) => ({
+  type: PeopleActions.SET_SELECTED_CARD_ITEM,
+  payload: { id },
+});
+export const setSelectedCardItem = (id) => {
+  return (dispatch) => {
+    dispatch(setSelectedCardItemDispatch(id));
+  };
+};
+
+let favoritesIsAlreadyLoaded = false;
+
 export function getFavoriteHeroes() {
   return async (dispatch, getState) => {
-    const { userInfo } = getState();
-    if (userInfo.offlineMode) {
-      const favorites = getFavoritesHeroesFromStorage();
-      dispatch(toggleFavoritesHeroesDispatch(favorites || {}));
-    } else {
-      const { user } = userInfo;
-      if (user && user.uid) {
-        try {
-          const value = await firebaseDb.ref(user.uid).once("value");
-          if (value && value.val) {
-            const favorites = value.val();
-            if (favorites)
-              dispatch(toggleFavoritesHeroesDispatch(JSON.parse(favorites)));
-            else
-            dispatch(toggleFavoritesHeroesDispatch({}));
+    const { userInfo, peopleData } = getState();
+
+    if (peopleData.favoriteHeroes === null) {
+      if (userInfo.offlineMode) {
+        const favorites = getFavoritesHeroesFromStorage();
+        dispatch(toggleFavoritesHeroesDispatch(favorites || {}));
+      } else {
+        const { user } = userInfo;
+        if (user && user.uid) {
+          try {
+            if (!favoritesIsAlreadyLoaded) {
+              favoritesIsAlreadyLoaded = true;
+              const value = await firebaseDb.ref(user.uid).once("value");
+              favoritesIsAlreadyLoaded = false;
+              if (value && value.val) {
+                const favorites = value.val();
+                if (favorites)
+                  dispatch(
+                    toggleFavoritesHeroesDispatch(JSON.parse(favorites))
+                  );
+                else dispatch(toggleFavoritesHeroesDispatch({}));
+              }
+            }
+          } catch (ex) {
+            console.log(ex);
           }
-        } catch (ex) {
-          console.log(ex);
         }
       }
     }

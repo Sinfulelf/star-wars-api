@@ -17,6 +17,7 @@ import { PersonCard } from "./PersonCard";
 import { HeroInfo } from "./HeroInfo";
 
 class Content extends PureComponent {
+
   render() {
     const {
       pageName,
@@ -30,6 +31,8 @@ class Content extends PureComponent {
       relationships,
       getFilmData,
       getPlanetData,
+      setSelectedCardItem,
+      selectedCardId
     } = this.props;
 
     return (
@@ -48,6 +51,11 @@ class Content extends PureComponent {
             </Loader>
           </Dimmer>
         )}
+        {!loading &&
+          displayType === PeoplePageDispaType.cards &&
+          !!selectedCardId && (
+            <Dimmer active inverted className="p-absolute card-open-mask" />
+          )}
         {!loading && !data.length && <h2>No data to display.</h2>}
         <ReactResizeDetector handleWidth>
           {({ width }) => (
@@ -63,6 +71,11 @@ class Content extends PureComponent {
                   toggleFavoriteHero={toggleFavoriteHero}
                   observerIndex={observerIndex}
                   setObservedItemIndex={setObservedItemIndex}
+                  setSelectedCard={setSelectedCardItem}
+                  selectedCardId={selectedCardId}
+                  relationships={relationships}
+                  getFilmData={getFilmData}
+                  getPlanetData={getPlanetData}
                 />
               ))}
               {!!data[observerIndex] && (
@@ -116,6 +129,8 @@ Content.propTypes = {
   relationships: PropTypes.shape(RelationshipsStorePropTypes).isRequired,
   getFilmData: PropTypes.func.isRequired,
   getPlanetData: PropTypes.func.isRequired,
+  setSelectedCardItem: PropTypes.func.isRequired,
+  selectedCardId: PropTypes.number
 };
 
 export const PeoplePageContent = Content;

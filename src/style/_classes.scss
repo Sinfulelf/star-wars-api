@@ -30,6 +30,10 @@
   @include ellipsis;
 }
 
+.overflow-hidden {
+  overflow: hidden;
+}
+
 .hover-active-item {
   @include hover-active-item;
 }

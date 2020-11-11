@@ -12,6 +12,7 @@ import {
   getFavoriteHeroes as getFavoriteHeroesAction,
   setObservedItemIndex as setObservedItemIndexAction,
   setPeoplePageFavoritesViewMode as setPeoplePageFavoritesViewModeAction,
+  setSelectedCardItem as setSelectedCardItemAction,
 } from "../../actions/peopleActions";
 
 import {
@@ -45,9 +46,11 @@ class PeoplePage extends PureComponent {
   };
 
   onPaginationPageChange = async (page) => {
-    const { data, actions } = this.props;
-    if (data.peopleData.currentPage != page) {
-      await actions.getPeople(page, data.peopleData.filterName);
+    if (page || page === 0) {
+      const { data, actions } = this.props;
+      if (data.peopleData.currentPage !== page.toString()) {
+        await actions.getPeople(page, data.peopleData.filterName);
+      }
     }
   };
 
@@ -74,6 +77,7 @@ class PeoplePage extends PureComponent {
       setObservedItemIndex,
       getFilmData,
       getPlanetData,
+      setSelectedCardItem,
     } = actions;
 
     const paginationsCount = this.getPaginationsItemsCount();
@@ -100,6 +104,8 @@ class PeoplePage extends PureComponent {
           getFilmData={getFilmData}
           getPlanetData={getPlanetData}
           relationships={relationships}
+          setSelectedCardItem={setSelectedCardItem}
+          selectedCardId={peopleData.selectedCardId}
         />
         <PeoplePageFooter
           pageName={this.pageName}
@@ -147,7 +153,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(clearPeopleDataAction());
       },
       toggleFavoriteHero: (id, name) => {
-        dispatch(toggleFavoritesHeroesAction({[id]: name}));
+        dispatch(toggleFavoritesHeroesAction({ [id]: name }));
       },
       getFavoriteHeroes: async () => {
         await dispatch(getFavoriteHeroesAction());
@@ -163,6 +169,9 @@ const mapDispatchToProps = (dispatch) => {
       },
       getPlanetData: async (id) => {
         await dispatch(getPlanetDataAction(id));
+      },
+      setSelectedCardItem: (id) => {
+        dispatch(setSelectedCardItemAction(id));
       },
     },
   };

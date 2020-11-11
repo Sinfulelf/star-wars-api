@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PT from "prop-types";
 
 import { ParagraphMock } from "../../helpersComponents/Mocks";

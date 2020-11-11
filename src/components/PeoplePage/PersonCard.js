@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 import PT from "prop-types";
 
+import { RelationshipsStorePropTypes } from "../../models/storeModels";
+
 import {
   HeroDetailsPropTypes,
   PeoplePageDispaType,
@@ -8,7 +10,7 @@ import {
 
 import { personCardConfig } from "./personCardConfig";
 
-import { Header, Icon, Dimmer, Loader } from "semantic-ui-react";
+import { Header, Icon, Dimmer, Loader, Divider } from "semantic-ui-react";
 
 import { HeroInfo } from "./HeroInfo";
 
@@ -22,6 +24,7 @@ class PersonCardItem extends PureComponent {
     },
     isActive: false,
     heartIconFilled: false,
+    selectedCardId: null,
   };
 
   stylesConfigs = {
@@ -69,12 +72,21 @@ class PersonCardItem extends PureComponent {
       observerIndex,
       index,
       setObservedItemIndex,
+      setSelectedCard,
+      selectedCardId,
+      relationships,
+      getFilmData,
+      getPlanetData,
     } = this.props;
     const { style, isActive, heartIconFilled } = this.state;
 
     const favoritesNotUploaded = favoriteHeroes === null;
     const isFavorite = !!(favoriteHeroes || {})[item.id];
     const isObserved = index === observerIndex;
+    const itemCardIdSelected =
+      displayType === PeoplePageDispaType.cards &&
+      item.id &&
+      item.id === selectedCardId;
 
     return (
       <div
@@ -82,11 +94,17 @@ class PersonCardItem extends PureComponent {
           isActive || (isObserved && displayType === PeoplePageDispaType.list)
             ? "active"
             : ""
-        } ${displayType}`}
-        style={style}
+        } ${displayType} ${itemCardIdSelected ? "selected" : ""}`}
+        style={itemCardIdSelected ? personCardConfig.selectedCardStyle : style}
         onClick={() => {
           if (!isObserved && displayType === PeoplePageDispaType.list) {
             setObservedItemIndex(index);
+          }
+          if (
+            !itemCardIdSelected &&
+            displayType === PeoplePageDispaType.cards
+          ) {
+            setSelectedCard(item.id);
           }
         }}
       >
@@ -96,46 +114,72 @@ class PersonCardItem extends PureComponent {
           </Dimmer>
         )}
         <div className="hero-card__header">
-          <Header
-            as="h3"
-            title={item.name}
-            className="hero-name"
-            onMouseUp={(_) => {
-              this.setCardActiveState(false);
-            }}
-            onMouseLeave={(_) => {
-              this.setCardActiveState(false);
-            }}
-            onMouseDown={(_) => {
-              this.setCardActiveState(true);
-            }}
-          >
-            {item.name}
-          </Header>
-          <Icon.Group>
-            <Icon
-              name="heart"
-              className={`favor-icon ${
-                isFavorite ? "red" : heartIconFilled ? "pale-red" : "outline"
-              }`}
-              disabled={favoritesNotUploaded}
-              onMouseEnter={(_) => this.setHeartIconFilled(true)}
-              onMouseLeave={(_) => this.setHeartIconFilled(false)}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFavoriteHero(item.id, item.name);
+          <div className="hero-card__header__data">
+            <Header
+              as="h3"
+              title={item.name}
+              className="hero-name"
+              onMouseUp={(_) => {
+                this.setCardActiveState(false);
               }}
-            />
-            {favoritesNotUploaded && (
-              <Icon size="small" loading name="circle notch" className="favor-icon-loading" />
-            )}
-          </Icon.Group>
+              onMouseLeave={(_) => {
+                this.setCardActiveState(false);
+              }}
+              onMouseDown={(_) => {
+                this.setCardActiveState(true);
+              }}
+            >
+              {item.name}
+            </Header>
+            <Icon.Group>
+              <Icon
+                name="heart"
+                className={`favor-icon ${
+                  isFavorite ? "red" : heartIconFilled ? "pale-red" : "outline"
+                }`}
+                disabled={favoritesNotUploaded}
+                onMouseEnter={(_) => this.setHeartIconFilled(true)}
+                onMouseLeave={(_) => this.setHeartIconFilled(false)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavoriteHero(item.id, item.name);
+                }}
+              />
+              {favoritesNotUploaded && (
+                <Icon
+                  size="small"
+                  loading
+                  name="circle notch"
+                  className="favor-icon-loading"
+                />
+              )}
+            </Icon.Group>
+          </div>
           {displayType === PeoplePageDispaType.list && isObserved && (
             <Icon className="observer-caret" name="caret right" size="big" />
           )}
+          {itemCardIdSelected && (
+            <Icon
+              name="x"
+              size="large"
+              className="hover-active-item"
+              onClick={() => {
+                setSelectedCard(null);
+              }}
+            />
+          )}
         </div>
         {displayType === PeoplePageDispaType.cards && (
-          <HeroInfo item={item} showFullInfo={false} />
+          <div className="hero-info-wrapper">
+            {itemCardIdSelected && <Divider style={{ marginTop: 0 }} />}
+            <HeroInfo
+              item={item}
+              showFullInfo={itemCardIdSelected}
+              relationships={relationships}
+              getFilmData={getFilmData}
+              getPlanetData={getPlanetData}
+            />
+          </div>
         )}
       </div>
     );
@@ -152,6 +196,11 @@ PersonCardItem.propTypes = {
   toggleFavoriteHero: PT.func.isRequired,
   observerIndex: PT.number.isRequired,
   setObservedItemIndex: PT.func.isRequired,
+  setSelectedCard: PT.func.isRequired,
+  selectedCardId: PT.number,
+  getFilmData: PT.func,
+  getPlanetData: PT.func,
+  relationships: PT.shape(RelationshipsStorePropTypes),
 };
 
 export const PersonCard = PersonCardItem;

@@ -13,6 +13,7 @@ const {
   SET_PEOPLE_PAGE_FAVORITES_VIEW_MODE,
   TOGGLE_FAVORITE_HEROES,
   SET_OBSERVED_ITEM_INDEX,
+  SET_SELECTED_CARD_ITEM,
 } = PeopleActions;
 
 export const initialState = new PeopleStore();
@@ -35,6 +36,7 @@ export const peopleReducer = handleActions(
         ...peopleData,
         displayType: type,
         timeStamp: Date.now(),
+        selectedCardId: null,
       };
     },
     [SET_PEOPLE_PAGE_PAGINATION_PAGE]: (peopleData, { payload }) => {
@@ -45,6 +47,7 @@ export const peopleReducer = handleActions(
         currentPage: page,
         timeStamp: Date.now(),
         observerIndex: 0,
+        selectedCardId: null,
       };
     },
     [RESET_PEOPLE_DATA]: (peopleData, { payload }) => {
@@ -55,6 +58,7 @@ export const peopleReducer = handleActions(
         observerIndex: 0,
         currentPage: "1",
         uploadedPages: [],
+        selectedCardId: null,
       };
     },
     [CLEAR_PEOPLE_DATA]: (peopleData, { payload }) => {
@@ -99,6 +103,7 @@ export const peopleReducer = handleActions(
         people: updatedPeopleList,
         filterName: search,
         timeStamp: Date.now(),
+        selectedCardId: null
       };
     },
     [UPDATE_HERO_DATA]: (peopleData, { payload }) => {
@@ -129,6 +134,7 @@ export const peopleReducer = handleActions(
         people: peopleData.people.filter(
           (x) => x && x.id in peopleData.favoriteHeroes
         ),
+        selectedCardId: null,
       };
     },
     [TOGGLE_FAVORITE_HEROES]: (peopleData, { payload }) => {
@@ -150,6 +156,12 @@ export const peopleReducer = handleActions(
         people: peopleData.showFavoritesOnly
           ? peopleData.people.filter((x) => x && x.id in newFavorites)
           : peopleData.people,
+        selectedCardId:
+          peopleData.selectedCardId &&
+          peopleData.showFavoritesOnly &&
+          !(peopleData.selectedCardId in newFavorites)
+            ? null
+            : peopleData.selectedCardId,
       };
     },
     [SET_OBSERVED_ITEM_INDEX]: (peopleData, { payload }) => {
@@ -158,6 +170,15 @@ export const peopleReducer = handleActions(
         ...peopleData,
         observerIndex: index,
         timeStamp: Date.now(),
+      };
+    },
+    [SET_SELECTED_CARD_ITEM]: (peopleData, { payload }) => {
+      const { id } = payload;
+
+      return {
+        ...peopleData,
+        timeStamp: Date.now(),
+        selectedCardId: id,
       };
     },
   },
