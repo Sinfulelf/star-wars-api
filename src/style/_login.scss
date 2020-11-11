@@ -27,13 +27,16 @@ $login-form-width: 750px;
     }
 
     .firebase-auth-forms-column {
+      overflow: hidden;
+
       & > * {
-        transition: top 0.45s ease-out;
+        transition: top 0.45s ease-out, height 0.2s linear;
+        overflow: hidden;
       }
       .back-to-signin {
         position: absolute;
-        right: 4px;
-        top: -15px;
+        right: 14px;
+        top: 0px;
         @include hover-active-item;
       }
 
@@ -45,24 +48,28 @@ $login-form-width: 750px;
       }
       &.login {
         .firebase-singin-form {
-          top: 140px;
+          top: 0px;
+          height: 288px;
         }
         .firebase-auth-form-divider {
           top: 450px;
         }
         .firebase-register-form {
           top: 230px;
+          height: 0;
         }
       }
       &.register {
         .firebase-singin-form {
-          top: -230px;
+          top: -300px;
+          height: 0;
         }
         .firebase-auth-form-divider {
           top: 77px;
         }
         .firebase-register-form {
-          top: -130px;
+          top: 10px;
+          height: 288px;
         }
       }
     }
@@ -90,9 +97,7 @@ $login-form-width: 750px;
     .login-form {
       width: 0.65 * $login-form-width;
       height: 450px;
-      .firebase-login-form {
-        padding-bottom: 2.5em;
-      }
+      padding: 0 3em;
       .offline-section {
         box-shadow: -1px 0 0 0 rgba(34, 36, 38, 0.15);
       }
@@ -101,6 +106,10 @@ $login-form-width: 750px;
       }
       .vertical-devider {
         display: none;
+      }
+
+      .message {
+        text-indent: .7em;
       }
     }
   }

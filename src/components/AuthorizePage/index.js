@@ -135,7 +135,7 @@ const AuthPage = ({ history, data, actions }) => {
                 error={singInErrorState}
                 removeErrorState={removeSingInErrorState}
               />
-              <Divider className="firebase-auth-form-divider" />
+              {/* <Divider className="firebase-auth-form-divider" /> */}
               <RegisterForm
                 visible={showRegisterForm}
                 setVisible={() => {
