@@ -24,7 +24,6 @@ class PersonCardItem extends PureComponent {
     },
     isActive: false,
     heartIconFilled: false,
-    selectedCardId: null,
   };
 
   stylesConfigs = {
@@ -36,6 +35,11 @@ class PersonCardItem extends PureComponent {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    const selectedState = PersonCardItem.recalculateSelectedState(
+      nextProps,
+      prevState
+    );
+
     if (personCardConfig.shouldRecalculateStyle(nextProps, prevState)) {
       return {
         style: personCardConfig.recalculateStyle(nextProps),
@@ -44,9 +48,43 @@ class PersonCardItem extends PureComponent {
           index: nextProps.index,
           wrapperWidth: nextProps.wrapperWidth,
         },
+        ...selectedState,
       };
     }
+    return selectedState;
+  }
+
+  static recalculateSelectedState(nextProps, prevState) {
+    const { displayType, item, selectedCardId } = nextProps;
+    if (displayType === PeoplePageDispaType.cards) {
+      if (
+        item &&
+        item.id &&
+        !prevState.isSelected &&
+        selectedCardId === item.id
+      ) {
+        return {
+          isSelected: true,
+        };
+      } else if (
+        !item ||
+        !item.id ||
+        (prevState.isSelected && selectedCardId !== item.id)
+      ) {
+        return {
+          isSelected: false,
+        };
+      }
+    }
     return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.isSelected !== this.state.isSelected) {
+      setTimeout(() => {
+        this.forceUpdate();
+      }, 180);
+    }
   }
 
   setCardActiveState = (state) => {
@@ -73,21 +111,17 @@ class PersonCardItem extends PureComponent {
       index,
       setObservedItemIndex,
       setSelectedCard,
-      selectedCardId,
       relationships,
       getFilmData,
       getPlanetData,
       wrapperRef,
     } = this.props;
-    const { style, isActive, heartIconFilled } = this.state;
+    const { style, isActive, heartIconFilled, isSelected } = this.state;
 
     const favoritesNotUploaded = favoriteHeroes === null;
     const isFavorite = !!(favoriteHeroes || {})[item.id];
     const isObserved = index === observerIndex;
-    const itemCardIdSelected =
-      displayType === PeoplePageDispaType.cards &&
-      item.id &&
-      item.id === selectedCardId;
+    const itemCardIdSelected = isSelected;
 
     return (
       <div

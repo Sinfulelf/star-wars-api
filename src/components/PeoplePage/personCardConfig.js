@@ -17,14 +17,20 @@ export const personCardConfig = {
     },
   },
   selectedCardStyle(wrapper) {
+    const wrapperItem = wrapper || {
+      scrollHeight: 0,
+      clientHeight: 0,
+      scrollTop: 0,
+    };
+
     return {
       width: "auto",
       left: "6%",
       right: "6%",
-      top: 15 + ((wrapper || {}).scrollTop || 0),
+      top: 15 + wrapperItem.scrollTop,
       height: "auto",
       zIndex: 6,
-      maxHeight: 'calc(100% - 20px)'
+      maxHeight: wrapperItem.clientHeight - 30,
     };
   },
   shouldRecalculateStyle(nextProps, prevState) {
