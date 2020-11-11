@@ -3,9 +3,7 @@ import { validateForm } from ".";
 
 const getFirebaseConfig = () => ({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: `${process.env.NODE_ENV !== "development" ? "https://" : ""}${
-    process.env.REACT_APP_FIREBASE_AUTH_DOMAIN
-  }`,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.REACT_APP_FIREBASE_STORE_BUCJET,
