@@ -92,6 +92,10 @@
               opacity: 0.5;
               @extend .ui.red;
             }
+            &-loading {
+              top: 1px;
+              left: 2px
+            }
           }
 
           .observer-caret {

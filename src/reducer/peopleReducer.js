@@ -124,6 +124,8 @@ export const peopleReducer = handleActions(
         ...peopleData,
         timeStamp: Date.now(),
         showFavoritesOnly: state,
+        currentPage: "1",
+        uploadedPages: [],
         people: peopleData.people.filter(
           (x) => x && x.id in peopleData.favoriteHeroes
         ),

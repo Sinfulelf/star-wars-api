@@ -14,7 +14,7 @@ export class PeopleStore {
   currentPage = "1";
   uploadedPages = [];
 
-  favoriteHeroes = {};
+  favoriteHeroes = null;
 
   itemsPerPage = 10;
   exFavorite = false;

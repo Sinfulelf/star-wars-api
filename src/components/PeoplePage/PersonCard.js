@@ -72,7 +72,8 @@ class PersonCardItem extends PureComponent {
     } = this.props;
     const { style, isActive, heartIconFilled } = this.state;
 
-    const isFavorite = !!favoriteHeroes[item.id];
+    const favoritesNotUploaded = favoriteHeroes === null;
+    const isFavorite = !!(favoriteHeroes || {})[item.id];
     const isObserved = index === observerIndex;
 
     return (
@@ -111,18 +112,24 @@ class PersonCardItem extends PureComponent {
           >
             {item.name}
           </Header>
-          <Icon
-            name="heart"
-            className={`favor-icon ${
-              isFavorite ? "red" : heartIconFilled ? "pale-red" : "outline"
-            }`}
-            onMouseEnter={(_) => this.setHeartIconFilled(true)}
-            onMouseLeave={(_) => this.setHeartIconFilled(false)}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleFavoriteHero(item.id, item.name);
-            }}
-          />
+          <Icon.Group>
+            <Icon
+              name="heart"
+              className={`favor-icon ${
+                isFavorite ? "red" : heartIconFilled ? "pale-red" : "outline"
+              }`}
+              disabled={favoritesNotUploaded}
+              onMouseEnter={(_) => this.setHeartIconFilled(true)}
+              onMouseLeave={(_) => this.setHeartIconFilled(false)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavoriteHero(item.id, item.name);
+              }}
+            />
+            {favoritesNotUploaded && (
+              <Icon size="small" loading name="circle notch" className="favor-icon-loading" />
+            )}
+          </Icon.Group>
           {displayType === PeoplePageDispaType.list && isObserved && (
             <Icon className="observer-caret" name="caret right" size="big" />
           )}
@@ -141,7 +148,7 @@ PersonCardItem.propTypes = {
   displayType: PT.oneOf([PeoplePageDispaType.cards, PeoplePageDispaType.list])
     .isRequired,
   item: PT.shape(HeroDetailsPropTypes).isRequired,
-  favoriteHeroes: PT.object.isRequired,
+  favoriteHeroes: PT.object,
   toggleFavoriteHero: PT.func.isRequired,
   observerIndex: PT.number.isRequired,
   setObservedItemIndex: PT.func.isRequired,

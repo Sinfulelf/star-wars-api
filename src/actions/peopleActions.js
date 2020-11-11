@@ -132,7 +132,7 @@ export function setPeoplePageFavoritesViewMode(state) {
     if (state) {
       await dispatch(getPeopleFavoriteData(1, filterName));
     } else {
-      dispatch(resetPeopleDataDispatch());
+      //dispatch(resetPeopleDataDispatch());
       await dispatch(getPeopleData(1, filterName));
     }
   };
@@ -145,7 +145,6 @@ const toggleFavoritesHeroesDispatch = (items) => ({
 export function toggleFavoritesHeroes(items) {
   return async (dispatch, getState) => {
     dispatch(toggleFavoritesHeroesDispatch(items));
-    console.log(123);
     const { userInfo, peopleData } = getState();
     if (userInfo.offlineMode) {
       setFavoritesHeroesToStorage(peopleData.favoriteHeroes);
@@ -174,14 +173,19 @@ export function getFavoriteHeroes() {
   return async (dispatch, getState) => {
     const { userInfo } = getState();
     if (userInfo.offlineMode) {
-      dispatch(toggleFavoritesHeroesDispatch(getFavoritesHeroesFromStorage()));
+      const favorites = getFavoritesHeroesFromStorage();
+      dispatch(toggleFavoritesHeroesDispatch(favorites || {}));
     } else {
       const { user } = userInfo;
       if (user && user.uid) {
         try {
-          const value = await firebaseDb.ref(user.uid).once('value');
-          if(value && value.val) {
-            dispatch(toggleFavoritesHeroesDispatch(JSON.parse(value.val())));
+          const value = await firebaseDb.ref(user.uid).once("value");
+          if (value && value.val) {
+            const favorites = value.val();
+            if (favorites)
+              dispatch(toggleFavoritesHeroesDispatch(JSON.parse(favorites)));
+            else
+            dispatch(toggleFavoritesHeroesDispatch({}));
           }
         } catch (ex) {
           console.log(ex);
@@ -209,8 +213,8 @@ function getPeopleFavoriteData(page, search) {
     try {
       dispatch(setPeoplePageLoadingState(true));
       const filterName = (search || "").toLowerCase();
-      const filteredItems = Object.keys(favoriteHeroes)
-        .map((key) => ({ id: Number(key), name: favoriteHeroes[key] }))
+      const filteredItems = Object.keys(favoriteHeroes || {})
+        .map((key) => ({ id: Number(key), name: (favoriteHeroes || {})[key] }))
         .filter(
           (x) =>
             x &&

@@ -110,7 +110,7 @@ Content.propTypes = {
   ]).isRequired,
   observerIndex: PropTypes.number.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape(HeroDetailsPropTypes)).isRequired,
-  favoriteHeroes: PropTypes.object.isRequired,
+  favoriteHeroes: PropTypes.object,
   toggleFavoriteHero: PropTypes.func.isRequired,
   setObservedItemIndex: PropTypes.func.isRequired,
   relationships: PropTypes.shape(RelationshipsStorePropTypes).isRequired,
