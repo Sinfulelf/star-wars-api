@@ -21,7 +21,7 @@ export const personCardConfig = {
       width: "auto",
       left: "6%",
       right: "6%",
-      top: 15 + (wrapper || {}).scrollTop || 0,
+      top: 15 + ((wrapper || {}).scrollTop || 0),
       height: "auto",
       zIndex: 6,
     };
