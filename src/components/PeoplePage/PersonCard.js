@@ -77,6 +77,7 @@ class PersonCardItem extends PureComponent {
       relationships,
       getFilmData,
       getPlanetData,
+      wrapperRef,
     } = this.props;
     const { style, isActive, heartIconFilled } = this.state;
 
@@ -95,7 +96,11 @@ class PersonCardItem extends PureComponent {
             ? "active"
             : ""
         } ${displayType} ${itemCardIdSelected ? "selected" : ""}`}
-        style={itemCardIdSelected ? personCardConfig.selectedCardStyle : style}
+        style={
+          itemCardIdSelected
+            ? personCardConfig.selectedCardStyle(wrapperRef)
+            : style
+        }
         onClick={() => {
           if (!isObserved && displayType === PeoplePageDispaType.list) {
             setObservedItemIndex(index);
@@ -201,6 +206,7 @@ PersonCardItem.propTypes = {
   getFilmData: PT.func,
   getPlanetData: PT.func,
   relationships: PT.shape(RelationshipsStorePropTypes),
+  wrapperRef: PT.oneOfType([PT.element, PT.object]),
 };
 
 export const PersonCard = PersonCardItem;

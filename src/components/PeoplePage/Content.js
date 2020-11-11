@@ -17,6 +17,11 @@ import { PersonCard } from "./PersonCard";
 import { HeroInfo } from "./HeroInfo";
 
 class Content extends PureComponent {
+  setRef = (name, ref) => {
+    if (!this[name]) {
+      this[name] = ref;
+    }
+  };
 
   render() {
     const {
@@ -32,7 +37,7 @@ class Content extends PureComponent {
       getFilmData,
       getPlanetData,
       setSelectedCardItem,
-      selectedCardId
+      selectedCardId,
     } = this.props;
 
     return (
@@ -59,7 +64,10 @@ class Content extends PureComponent {
         {!loading && !data.length && <h2>No data to display.</h2>}
         <ReactResizeDetector handleWidth>
           {({ width }) => (
-            <div className="heroes-cards__wrapper">
+            <div
+              className="heroes-cards__wrapper"
+              ref={(ref) => this.setRef("cardsWrapper", ref)}
+            >
               {data.map((item, index) => (
                 <PersonCard
                   key={item.urlValue || index}
@@ -76,6 +84,7 @@ class Content extends PureComponent {
                   relationships={relationships}
                   getFilmData={getFilmData}
                   getPlanetData={getPlanetData}
+                  wrapperRef={this.cardsWrapper || null}
                 />
               ))}
               {!!data[observerIndex] && (
@@ -130,7 +139,7 @@ Content.propTypes = {
   getFilmData: PropTypes.func.isRequired,
   getPlanetData: PropTypes.func.isRequired,
   setSelectedCardItem: PropTypes.func.isRequired,
-  selectedCardId: PropTypes.number
+  selectedCardId: PropTypes.number,
 };
 
 export const PeoplePageContent = Content;

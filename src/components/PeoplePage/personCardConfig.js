@@ -16,13 +16,15 @@ export const personCardConfig = {
       verticalGap: 14,
     },
   },
-  selectedCardStyle: {
-    width: 'auto',
-    left: '6%',
-    right: '6%',
-    top: '10%',
-    height: 'auto',
-    zIndex: 6
+  selectedCardStyle(wrapper) {
+    return {
+      width: "auto",
+      left: "6%",
+      right: "6%",
+      top: 15 + (wrapper || {}).scrollTop || 0,
+      height: "auto",
+      zIndex: 6,
+    };
   },
   shouldRecalculateStyle(nextProps, prevState) {
     const { displayType, index, wrapperWidth } = nextProps;
