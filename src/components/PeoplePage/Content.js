@@ -59,13 +59,22 @@ class Content extends PureComponent {
         {!loading &&
           displayType === PeoplePageDispaType.cards &&
           !!selectedCardId && (
-            <Dimmer active inverted className="p-absolute card-open-mask" />
+            <Dimmer
+              active
+              inverted
+              className="p-absolute card-open-mask"
+              onClick={() => {
+                setSelectedCardItem(null);
+              }}
+            />
           )}
         {!loading && !data.length && <h2>No data to display.</h2>}
         <ReactResizeDetector handleWidth>
           {({ width }) => (
             <div
-              className="heroes-cards__wrapper"
+              className={`heroes-cards__wrapper ${
+                !!selectedCardId ? "overflow-hidden" : ""
+              }`}
               ref={(ref) => this.setRef("cardsWrapper", ref)}
             >
               {data.map((item, index) => (

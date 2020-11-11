@@ -24,6 +24,7 @@ export const personCardConfig = {
       top: 15 + ((wrapper || {}).scrollTop || 0),
       height: "auto",
       zIndex: 6,
+      maxHeight: 'calc(100% - 20px)'
     };
   },
   shouldRecalculateStyle(nextProps, prevState) {
