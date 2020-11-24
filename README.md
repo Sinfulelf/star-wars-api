@@ -26,7 +26,7 @@ ___
 - Use one of the following: React Context, Flux (flux-utils), **Redux**, MobX as state management system.
 - Implement redirection between pages using routing with **react-router**.
 
-###Advanced requirements
+### Advanced requirements
 
 - Implement lazy loading for separate components.
 - Cashing the API requests.
@@ -34,7 +34,7 @@ ___
 - Use some creative animations/transitions/design on space topic.
 - Use firebase for auth user and persist favorites list in firebase firestore instead local storage.
 
-###Package commands
+### Package commands
 ___
 - **start** react-scripts start
 - **build** react-scripts build
