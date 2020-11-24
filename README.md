@@ -3,7 +3,7 @@ ___
 Simple project that shows my codestyle and React level skill for fall 2020.
 
 #Demo
-[Demo Link][1]
+[Demo link](https://sinfulelf.github.io/star-wars-api/)
 
 ## Libraries and technologies
 
@@ -39,5 +39,3 @@ ___
 - **start** react-scripts start
 - **build** react-scripts build
 
-###End
-[1]: https://sinfulelf.github.io/star-wars-api/#/ "sinfulelf.github.io/star-wars-api/"
