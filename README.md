@@ -7,17 +7,17 @@ Simple project that shows my codestyle and React level skill for fall 2020.
 
 ## Libraries and technologies
 
-- UI
+- UI  
  ✅ node-sass;  
  ✅ semantic-ui-react semantic-ui-css;  
-- BL
+- BL  
  ✅ redux react-redux;  
  ✅ redux-thunk;  
  ✅ redux-actions;  
  ✅ react-router react-router-dom;  
  ✅ react-resize-detector;  
  ✅ dotenv;  
-- Other
+- Other  
  ✅ firebase;  
 
 ### Target
