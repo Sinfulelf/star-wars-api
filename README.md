@@ -2,7 +2,7 @@
 ___
 Simple project that shows my codestyle and React level skill for fall 2020.
 
-#Demo
+## Demo
 [Demo link](https://sinfulelf.github.io/star-wars-api/)
 
 ## Libraries and technologies
