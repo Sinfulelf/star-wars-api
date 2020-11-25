@@ -75,6 +75,8 @@ class PersonCardItem extends PureComponent {
           isSelected: false,
         };
       }
+    } else {
+      return { isSelected: false, }
     }
     return null;
   }
